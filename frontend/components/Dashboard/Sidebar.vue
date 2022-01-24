@@ -7,7 +7,7 @@
 				</a>
 			</div>
 			<ul class="sidebar-menu">
-				<li :class="route === '/dashboard' ?'active' : ''">
+				<li>
 					<nuxt-link :to="localePath('dashboard')" class="nav-link" :class="active">
 						<i>
 							<icon :icon="['fas', 'tachometer-alt']"></icon>
@@ -16,18 +16,18 @@
 					</nuxt-link>
 				</li>
 				<li class="sidebar-dropdown">
-					<a href="#" class="has-dropdown" :class="route.substring(0, 21) === '/dashboard/admin/plan' ? 'dropdown-active' : ''" @click.prevent="changeMenu('/dashboard/admin/plan')">
+					<a href="#" class="has-dropdown" :class="plan || route.substring(17, 21) === 'plan' ? 'dropdown-active' : ''" @click.prevent="plan = !plan">
 						<i>
-							<icon :icon="['fas', 'columns']"></icon>
+							<icon :icon="['fas', 'box-open']"></icon>
 						</i>
 						<span>Plan
-							<i :class="activeMenu.substring(0, 21) === '/dashboard/admin/plan' ? 'rotate-90' : ''">
+							<i :class="plan">
 								<icon :icon="['fas', 'chevron-right']"></icon>
 							</i>
 						</span>
 					</a>
-					<Slide :active="activeMenu.substring(0, 21) === '/dashboard/admin/plan'" :duration="300">
-						<ul class="sidebar-dropdown-menu">
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="plan || route.substring(17, 21) === 'plan'">
 							<li>
 								<nuxt-link :to="localePath('dashboard-admin-plan')">All Plan</nuxt-link>
 							</li>
@@ -35,15 +35,7 @@
 								<nuxt-link :to="localePath('dashboard-admin-plan-create')">Create Plan</nuxt-link>
 							</li>
 						</ul>
-					</Slide>
-				</li>
-				<li :class="route === '/dashboard' ?'active' : ''">
-					<nuxt-link :to="localePath('dashboard')" class="nav-link" :class="active">
-						<i>
-							<icon :icon="['fas', 'tachometer-alt']"></icon>
-						</i>
-						<span>Dashboard</span>
-					</nuxt-link>
+					</transition>
 				</li>
 			</ul>
 		</aside>
@@ -57,19 +49,14 @@
 
 		data() {
 			return {
-				activeMenu: "",
 				route: "",
+				plan: false,
 			};
 		},
 
-		methods: {
-			changeMenu(menu) {
-				this.activeMenu = this.activeMenu !== menu ? menu : "";
-			},
-		},
+		methods: {},
 
 		created() {
-			this.activeMenu = this.$route.path;
 			this.route = this.$route.path;
 		},
 

@@ -16,12 +16,14 @@ class CreatePlansTable extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('description');
-            $table->string('duratiom');
+            $table->string('duration_name');
+            $table->integer('duration_day');
             $table->decimal('price', 8, 2);
-            $table->decimal('special_price', 8, 2)->nullable();
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->decimal('discount_price', 8, 2)->nullable();
+            $table->date('discount_start')->nullable();
+            $table->date('discount_end')->nullable();
             $table->integer('product_limit');
             $table->integer('storage_limit');
             $table->integer('variation_limit');
@@ -30,7 +32,6 @@ class CreatePlansTable extends Migration
             $table->boolean('support');
             $table->boolean('qr_code');
             $table->boolean('status');
-            $table->boolean('trial');
             $table->integer('purchase')->default(0);
             $table->timestamps();
         });

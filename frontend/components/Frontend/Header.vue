@@ -223,7 +223,7 @@
 										<i>
 											<icon :icon="['far', 'chart-bar']"></icon>
 										</i>
-										<small>3</small>
+										<small class="color-white">3</small>
 									</button>
 								</li>
 								<li>
@@ -231,7 +231,7 @@
 										<i>
 											<icon :icon="['far', 'heart']"></icon>
 										</i>
-										<small>2</small>
+										<small class="color-white">2</small>
 									</button>
 								</li>
 								<li>
@@ -239,7 +239,7 @@
 										<i>
 											<icon :icon="['fab', 'opencart']"></icon>
 										</i>
-										<small>5</small>
+										<small class="color-white">5</small>
 									</button>
 								</li>
 								<li class="mobile-only">

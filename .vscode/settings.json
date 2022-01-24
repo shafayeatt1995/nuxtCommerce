@@ -11,5 +11,7 @@
 	},
 	"editor.quickSuggestions": {
 		"strings": true,
-	}
+	},
+	"editor.insertTabs": false,
+	"editor.tabSize": 4,
 }

@@ -37,16 +37,23 @@
 		left: 0;
 		height: 65px;
 		justify-content: space-around;
-		background: #fcb800;
+		background: #6777ef;
+		box-shadow: 0 1px 10px rgba(0, 0, 0, 0.25);
 		z-index: 999;
 	}
 
 	ul.nav-cart li button small {
 		background: #fff;
+		color: #333;
 	}
 
 	ul.nav-cart li button i {
 		font-size: 30px;
+	}
+
+	ul.nav-cart li a,
+	ul.nav-cart li button {
+		color: #fff;
 	}
 
 	.mobile-only {
@@ -86,7 +93,8 @@
 	}
 
 	.logo button {
-		background: #fcb800;
+		background: #6777ef;
+		color: #fff;
 		border: none;
 		outline: none;
 		font-size: 25px;
@@ -154,16 +162,19 @@
 		left: 0;
 		height: 65px;
 		justify-content: space-around;
-		background: #fcb800;
+		background: #6777ef;
+		box-shadow: 0 1px 10px rgba(0, 0, 0, 0.25);
 		z-index: 999;
 	}
 
 	ul.nav-cart li button small {
 		background: #fff;
+		color: #333;
 	}
 
-	ul.nav-cart li button i {
-		font-size: 30px;
+	ul.nav-cart li a,
+	ul.nav-cart li button {
+		color: #fff;
 	}
 
 	.mobile-only {
@@ -221,7 +232,8 @@
 	}
 
 	.logo button {
-		background: #fcb800;
+		background: #6777ef;
+		color: #fff;
 		border: none;
 		outline: none;
 		font-size: 25px;

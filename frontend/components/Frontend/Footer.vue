@@ -135,7 +135,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-9">
-							<div class="footer-bottom-copyright">
+							<div class="footer-bottom-copyright color-white">
 								{{$t('copyright')}}
 								<a href="http://amianik.xyz" target="_blank">Shafayet Al-Anik.</a>
 							</div>

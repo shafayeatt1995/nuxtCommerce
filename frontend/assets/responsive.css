@@ -37,7 +37,7 @@
 		left: 0;
 		height: 65px;
 		justify-content: space-around;
-		background: #fcb800;
+		background: #fa0;
 		z-index: 999;
 	}
 
@@ -86,7 +86,7 @@
 	}
 
 	.logo button {
-		background: #fcb800;
+		background: #fa0;
 		border: none;
 		outline: none;
 		font-size: 25px;
@@ -154,7 +154,7 @@
 		left: 0;
 		height: 65px;
 		justify-content: space-around;
-		background: #fcb800;
+		background: #fa0;
 		z-index: 999;
 	}
 
@@ -221,7 +221,7 @@
 	}
 
 	.logo button {
-		background: #fcb800;
+		background: #fa0;
 		border: none;
 		outline: none;
 		font-size: 25px;

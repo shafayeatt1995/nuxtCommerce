@@ -190,7 +190,7 @@
 		methods: {
 			toggleSidebar() {
 				this.sidebar = !this.sidebar;
-				this.$nuxt.$emit("toggleSidebar", this.sidebar);
+				$nuxt.$emit("toggleSidebar", this.sidebar);
 			},
 
 			showSection(section) {
