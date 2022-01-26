@@ -170,6 +170,10 @@ p, ul:not(.list-unstyled), ol {
 	line-height: 28px;
 }
 
+button {
+	outline: none;
+}
+
 .shadow {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
 }
@@ -2109,7 +2113,7 @@ h6 .badge {
 	left: 0;
 	right: 5px;
 	position: absolute;
-	z-index: 89;
+	z-index: 1;
 	background-color: transparent;
 }
 
@@ -2313,7 +2317,7 @@ h6 .badge {
 }
 
 .navbar .nav-link:hover {
-	color: #333;
+	color: #fff;
 }
 
 .navbar .nav-link.disabled {
@@ -2332,7 +2336,7 @@ h6 .badge {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 99;
+	z-index: 2;
 }
 
 .sidebar-overlay svg {
@@ -3057,6 +3061,7 @@ pre {
 	background: #fff;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
 }
 
@@ -3205,7 +3210,7 @@ pre {
 	height: 100%;
 	width: 250px;
 	background-color: #fff;
-	z-index: 880;
+	z-index: 5;
 	left: -250px;
 	overflow-y: auto;
 }
@@ -3587,6 +3592,7 @@ body.layout-3 .main-footer {
 	padding-top: 80px;
 	width: 100%;
 	position: relative;
+	z-index: 0;
 }
 
 .main-content.active,

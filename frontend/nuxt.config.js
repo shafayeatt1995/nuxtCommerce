@@ -34,6 +34,7 @@ export default {
 		"./plugins/pagination.js",
 		"./plugins/filter.js",
 		{ src: './plugins/toast.js', ssr: false },
+		{ src: './plugins/sweetAlert.js', ssr: false },
 	],
 
 	components: true,

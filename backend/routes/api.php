@@ -19,6 +19,14 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('create-plan', 'PlanController@createPlan');
     Route::post('update-plan/{id}', 'PlanController@updateePlan');
     Route::post('delete-plan', 'PlanController@deletePlan');
+    Route::post('search-plan', 'PlanController@searchPlan');
+
+    //Brand Controller
+    Route::get('brand', 'BrandController@index');
+    Route::get('edit-brand/{id}', 'BrandController@editBrand');
+    Route::post('create-brand', 'BrandController@createBrand');
+    Route::post('update-brand/{id}', 'BrandController@updateeBrand');
+    Route::post('delete-brand', 'BrandController@deleteBrand');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

@@ -44,8 +44,8 @@
 						? error.response.data.errors[
 								Object.keys(error.response.data.errors)[0]
 						  ][0]
-						: error.response.data
-						? error.response.data
+						: error.response.data.message
+						? error.response.data.message
 						: "Something Wrong! Please try Again"
 				);
 			});
@@ -101,6 +101,7 @@
 		height: 1em;
 		text-align: center;
 		transform: scale(0);
+		font-size: 60px;
 		transition: transform 0.3s ease-out 0s;
 		z-index: 3;
 		height: 85px;
@@ -172,14 +173,14 @@
 	}
 
 	.preloader.active .circle-dark {
-		width: 370px;
-		height: 370px;
+		width: 300px;
+		height: 300px;
 		transition: 0.3s ease-in 0s;
 	}
 
 	.preloader.active .circle-dark-dashed {
-		width: 380px;
-		height: 380px;
+		width: 310px;
+		height: 310px;
 		border: 2px dashed #6b4fe8;
 	}
 

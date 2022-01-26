@@ -200,7 +200,7 @@
 			logout() {
 				this.$auth.logout("laravelJWT").then(
 					() => {
-						this.$router.push("/dashboard/login");
+						this.$router.push(this.localePath("dashboard-login"));
 					},
 					() => {
 						this.$nuxt.$emit(

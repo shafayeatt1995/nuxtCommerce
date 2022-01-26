@@ -11,12 +11,14 @@ class PlanController extends Controller
 {
 	public function index()
 	{
+		$this->authorize('admin');
 		$plans = Plan::latest()->paginate(50);
 		return response()->json(compact('plans'));
 	}
 
 	public function createPlan(Request $request)
 	{
+		$this->authorize('admin');
 		$request->validate([
 			'name' => 'required|unique:plans',
 			'description' => 'required',
@@ -59,16 +61,18 @@ class PlanController extends Controller
 
 	public function editPlan($id)
 	{
+		$this->authorize('admin');
 		$plan = Plan::where('id', $id)->first();
 		if (isset($plan)) {
 			return response()->json(compact('plan'));
 		} else {
-			return response()->json('plan not found', 404);
+			return response()->json(['message' => 'Plan not found'], 404);
 		}
 	}
 
 	public function updateePlan(Request $request, $id)
 	{
+		$this->authorize('admin');
 		$request->validate([
 			'name' => 'required',
 			'description' => 'required',
@@ -111,6 +115,7 @@ class PlanController extends Controller
 
 	public function deletePlan(Request $request)
 	{
+		$this->authorize('admin');
 		$request->validate([
 			"idList" => "required|array|min:1"
 		]);
@@ -119,9 +124,19 @@ class PlanController extends Controller
 			if (isset($plan)) {
 				$plan->delete();
 			} else {
-				return response()->json('Plan Not found', 422);
+				return response()->json(['message' => 'Plan not deleted'], 404);
 			}
 		}
 		return response()->json('Plan successfully deleted');
+	}
+
+	public function searchPlan(Request $request)
+	{
+		$this->authorize('admin');
+		$request->validate([
+			"collum" => "required"
+		]);
+		$plans = Plan::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->paginate(50);
+		return response()->json(compact('plans'));
 	}
 }

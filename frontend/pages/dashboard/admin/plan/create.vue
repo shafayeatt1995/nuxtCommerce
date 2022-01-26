@@ -7,7 +7,7 @@
 		<div class="section-body">
 			<form class="row" @submit.prevent="submit">
 				<div class="col-lg-8">
-					<div class="bg-white shadow p-3 rounded min-h100">
+					<div class="bg-white p-3 min-h100 card card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
 							<label for="name">Plan Name</label>
@@ -73,12 +73,11 @@
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div class="bg-white shadow p-3 rounded min-h100">
+					<div class="bg-white p-3 min-h100 card card-primary">
 						<h3 class="text-center">Access Option</h3>
 						<div class="form-group">
 							<label for="inventory">Inventory</label>
 							<select class="form-control" id="inventory" v-model="form.inventory">
-								<option value="">Select a option</option>
 								<option :value="true">Enable</option>
 								<option :value="false">Disable</option>
 							</select>
@@ -87,7 +86,6 @@
 						<div class="form-group">
 							<label for="pos">POS</label>
 							<select class="form-control" id="pos" v-model="form.pos">
-								<option value="">Select a option</option>
 								<option :value="true">Enable</option>
 								<option :value="false">Disable</option>
 							</select>
@@ -96,7 +94,6 @@
 						<div class="form-group">
 							<label for="qrCode">QR-Code</label>
 							<select class="form-control" id="qrCode" v-model="form.qrCode">
-								<option value="">Select a option</option>
 								<option :value="true">Enable</option>
 								<option :value="false">Disable</option>
 							</select>
@@ -105,7 +102,6 @@
 						<div class="form-group">
 							<label for="support">Support</label>
 							<select class="form-control" id="support" v-model="form.support">
-								<option value="">Select a option</option>
 								<option :value="true">Enable</option>
 								<option :value="false">Disable</option>
 							</select>
@@ -115,8 +111,8 @@
 						<div class="form-group">
 							<label for="status">Status</label>
 							<select class="form-control" id="status" v-model="form.status">
-								<option :value="true">Publish plan</option>
-								<option :value="false">Save to draft</option>
+								<option :value="true">Active plan</option>
+								<option :value="false">Deactive Plan</option>
 							</select>
 							<p class="invalid-feedback" v-if="errors.status">{{errors.status[0]}}</p>
 						</div>
@@ -158,10 +154,10 @@
 					productLimit: "",
 					storageLimit: "",
 					variationLimit: "",
-					inventory: "",
-					pos: "",
-					qrCode: "",
-					support: "",
+					inventory: true,
+					pos: true,
+					qrCode: true,
+					support: true,
 					status: false,
 				},
 				errors: {},

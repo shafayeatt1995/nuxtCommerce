@@ -2,9 +2,9 @@
 	<div class="main-sidebar sidebar-style-2" :class="active ? 'active':''">
 		<aside id="sidebar-wrapper">
 			<div class="sidebar-brand">
-				<a href="index.html" class="d-block">
+				<nuxt-link :to="localePath('index')" target="_blank">
 					<img :src="`${url}images/logo.png`" alt="logo" class="img-fluid px-5">
-				</a>
+				</nuxt-link>
 			</div>
 			<ul class="sidebar-menu">
 				<li>
@@ -37,6 +37,28 @@
 						</ul>
 					</transition>
 				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="brand || route.substring(17, 22) === 'brand' ? 'dropdown-active' : ''" @click.prevent="brand = !brand">
+						<i>
+							<icon :icon="['fas', 'tags']"></icon>
+						</i>
+						<span>Brand
+							<i :class="brand">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="brand || route.substring(17, 22) === 'brand'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-brand')">All Brand</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-brand-create')">Create Brand</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
 			</ul>
 		</aside>
 	</div>
@@ -51,6 +73,7 @@
 			return {
 				route: "",
 				plan: false,
+				brand: false,
 			};
 		},
 
