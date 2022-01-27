@@ -1,17 +1,17 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>All Plans</h1>
+			<h1>Plans</h1>
 			<nuxt-link :to="localePath('dashboard-admin-plan-create')" class="btn btn-primary">Create Plan</nuxt-link>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
-				<div class="d-flex w-100  justify-content-between flex-lg-row flex-column">
+				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
 					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deletePlan() : ''">
 						<select class="form-control" v-model="action">
 							<option value="">Select a option</option>
-							<option value="delete">Delete selected item</option>
+							<option value="delete">Delete selected items</option>
 						</select>
 						<button type="submit" class="btn btn-primary">Apply Action</button>
 					</form>
@@ -65,17 +65,17 @@
 							</td>
 							<td>0</td>
 							<td>
-								<span class="badge badge-success color-black" v-if="plan.status">Active</span>
-								<span class="badge badge-danger" v-else>Deactive</span>
+								<button class="badge badge-success color-black" type="button" @click="changeStatus(plan.id)" v-if="plan.status">Active</button>
+								<button class="badge badge-danger" type="button" @click="changeStatus(plan.id)" v-else>Deactive</button>
 							</td>
 							<td>{{plan.created_at | date}}</td>
 							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-plan-edit-id', params:{id: plan.id}})" class="btn btn-icon btn-primary mx-2">
+								<nuxt-link :to="localePath({name: 'dashboard-admin-plan-edit-id', params:{id: plan.id}})" class="btn btn-icon btn-primary mx-2 mb-2">
 									<i>
 										<icon :icon="['fas', 'edit']"></icon>
 									</i>
 								</nuxt-link>
-								<button class="btn btn-icon btn-danger" @click="deletePlan(plan.id)">
+								<button class="btn btn-icon btn-danger mb-2" @click="deletePlan(plan.id)">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -96,10 +96,10 @@
 </template>
 <script>
 	export default {
-		name: "all-plan",
+		name: "all-plans",
 		head() {
 			return {
-				title: `All Plan - ${this.appName}`,
+				title: `Plans - ${this.appName}`,
 			};
 		},
 		data() {
@@ -108,7 +108,6 @@
 				plans: {},
 				select: [],
 				action: "",
-				deleteType: "",
 				searchOption: {
 					keyword: "",
 					collum: "name",
@@ -145,8 +144,8 @@
 							text: "You won't be able to revert this!",
 							icon: "warning",
 							showCancelButton: true,
-							confirmButtonColor: "#3085d6",
-							cancelButtonColor: "#d33",
+							confirmButtonColor: "#6777ef",
+							cancelButtonColor: "#fc544b",
 							confirmButtonText: "Yes, delete it!",
 						})
 						.then((result) => {
@@ -203,6 +202,22 @@
 					);
 				}
 			},
+
+			changeStatus(id) {
+				if (this.click) {
+					this.click = false;
+					this.$axios.post(`status-plan/${id}`).then(
+						(response) => {
+							$nuxt.$emit("triggerPlan");
+							this.click = true;
+						},
+						(error) => {
+							$nuxt.$emit("error", error);
+							this.click = true;
+						}
+					);
+				}
+			},
 		},
 
 		created() {
@@ -210,6 +225,10 @@
 			this.$nuxt.$on("triggerPlan", () => {
 				this.getPlan();
 			});
+		},
+
+		beforeDestroy() {
+			this.$nuxt.$off("triggerPlan");
 		},
 	};
 </script>

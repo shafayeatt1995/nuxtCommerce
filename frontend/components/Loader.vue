@@ -11,7 +11,7 @@
 		text-align: center;
 	}
 
-	.spinner > div {
+	.spinner > span {
 		width: 18px;
 		height: 18px;
 		background-color: #333;

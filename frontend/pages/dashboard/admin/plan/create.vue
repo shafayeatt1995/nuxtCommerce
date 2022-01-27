@@ -174,9 +174,9 @@
 						(response) => {
 							$nuxt.$emit("success", response.data);
 							this.click = true;
-							this.$router.push({
-								name: "dashboard-admin-plan___en",
-							});
+							this.$router.push(
+								this.localePath("dashboard-admin-plan")
+							);
 						},
 						(error) => {
 							this.errors = error.response.data.errors;

@@ -59,6 +59,28 @@
 						</ul>
 					</transition>
 				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="category || route.substring(17, 25) === 'category' ? 'dropdown-active' : ''" @click.prevent="category = !category">
+						<i>
+							<icon :icon="['fas', 'tags']"></icon>
+						</i>
+						<span>Category
+							<i :class="category">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="category || route.substring(17, 25) === 'category'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-category')">Category</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-brand-create')">Sub Category</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
 			</ul>
 		</aside>
 	</div>
@@ -74,6 +96,7 @@
 				route: "",
 				plan: false,
 				brand: false,
+				category: false,
 			};
 		},
 

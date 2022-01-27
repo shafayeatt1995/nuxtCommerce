@@ -12,7 +12,7 @@ class PlanController extends Controller
 	public function index()
 	{
 		$this->authorize('admin');
-		$plans = Plan::latest()->paginate(50);
+		$plans = Plan::latest()->paginate(20);
 		return response()->json(compact('plans'));
 	}
 
@@ -70,7 +70,7 @@ class PlanController extends Controller
 		}
 	}
 
-	public function updateePlan(Request $request, $id)
+	public function updatePlan(Request $request, $id)
 	{
 		$this->authorize('admin');
 		$request->validate([
@@ -136,7 +136,16 @@ class PlanController extends Controller
 		$request->validate([
 			"collum" => "required"
 		]);
-		$plans = Plan::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->paginate(50);
+		$plans = Plan::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->paginate(20);
 		return response()->json(compact('plans'));
+	}
+
+	public function statusPlan($id)
+	{
+		$this->authorize('admin');
+		$plan = Plan::where('id', $id)->first();
+		$plan->status = !$plan->status;
+		$plan->save();
+		return response()->json('Plan status successfully changed');
 	}
 }
