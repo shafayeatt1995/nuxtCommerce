@@ -1,31 +1,31 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Create Category</h1>
+			<h1>Create Material</h1>
 		</div>
 
 		<div class="section-body">
 			<form class="row" @submit.prevent="submit">
 				<div class="col-lg-12">
-					<div class="bg-white p-3 min-h100 card card-primary">
+					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
-							<label for="name">Category Name</label>
+							<label for="name">Material Name</label>
 							<input type="text" class="form-control" id="name" v-model="form.name">
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
 						</div>
 						<div class="form-group">
-							<label for="qrCode">QR-Code</label>
-							<select class="form-control" id="qrCode" v-model="form.status">
+							<label for="status">Status</label>
+							<select class="form-control" id="status" v-model="form.status">
 								<option :value="true">Enable</option>
 								<option :value="false">Disable</option>
 							</select>
-							<p class="invalid-feedback" v-if="errors.qrCode">{{errors.qrCode[0]}}</p>
+							<p class="invalid-feedback" v-if="errors.status">{{errors.status[0]}}</p>
 						</div>
-						<button type="submit" class="btn btn-primary">
+						<button type="submit" class="btn btn-primary mt-5">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Create Category</span>
+								<span v-else>Create Material</span>
 							</transition>
 						</button>
 					</div>
@@ -36,10 +36,10 @@
 </template>
 <script>
 	export default {
-		name: "create-caterory",
+		name: "create-material",
 		head() {
 			return {
-				title: `Create Caterory - ${this.appName}`,
+				title: `Create Material - ${this.appName}`,
 			};
 		},
 
@@ -60,13 +60,10 @@
 			submit() {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post("create-category", this.form).then(
+					this.$axios.post("create-material", this.form).then(
 						(response) => {
 							$nuxt.$emit("success", response.data);
 							this.click = true;
-							this.$router.push(
-								this.localePath("dashboard-admin-category")
-							);
 						},
 						(error) => {
 							this.errors = error.response.data.errors;

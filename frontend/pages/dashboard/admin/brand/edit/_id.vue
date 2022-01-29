@@ -7,7 +7,7 @@
 		<div class="section-body">
 			<form class="row" @submit.prevent="submit" enctype="multipart/form-data">
 				<div class="col-lg-12">
-					<div class="bg-white p-3 min-h100 card card-primary">
+					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
 							<label for="name">Brand Name</label>

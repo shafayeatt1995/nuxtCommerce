@@ -21,7 +21,7 @@ class CategoryController extends Controller
         $this->authorize('admin');
         $request->validate([
             'name' => 'required|unique:categories',
-            'status' => 'required',
+            'status' => 'required|boolean',
         ]);
 
         $category = new Category();
@@ -39,7 +39,7 @@ class CategoryController extends Controller
         if (isset($category)) {
             return response()->json(compact('category'));
         } else {
-            return response()->json(['message' => 'Category not found'], 404);
+            return response()->json(['message' => 'Category not found'], 422);
         }
     }
 
@@ -48,7 +48,7 @@ class CategoryController extends Controller
         $this->authorize('admin');
         $request->validate([
             'name' => 'required',
-            'status' => 'required',
+            'status' => 'required|boolean',
         ]);
 
         $category = Category::where('id', $id)->first();
@@ -75,7 +75,7 @@ class CategoryController extends Controller
             if (isset($category)) {
                 $category->delete();
             } else {
-                return response()->json(['message' => 'Category Not found'], 422);
+                return response()->json(['message' => 'Category not found'], 422);
             }
         }
         return response()->json('Category successfully deleted');
@@ -87,7 +87,7 @@ class CategoryController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $categories = Category::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->paginate(20);
+        $categories = Category::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(20);
         return response()->json(compact('categories'));
     }
 

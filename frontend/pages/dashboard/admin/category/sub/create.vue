@@ -1,7 +1,8 @@
+
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Create Category</h1>
+			<h1>Create Sub-Category</h1>
 		</div>
 
 		<div class="section-body">
@@ -10,7 +11,15 @@
 					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
-							<label for="name">Category Name</label>
+							<label for="status">Category</label>
+							<select class="form-control" id="status" v-model="form.categoryId">
+								<option value="">Select a category</option>
+								<option :value="category.id" v-for="category in categories" :key="category.id">{{category.name}}</option>
+							</select>
+							<p class="invalid-feedback" v-if="errors.categoryId">{{errors.categoryId[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label for="name">Sub-Category Name</label>
 							<input type="text" class="form-control" id="name" v-model="form.name">
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
 						</div>
@@ -25,7 +34,7 @@
 						<button type="submit" class="btn btn-primary">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Create Category</span>
+								<span v-else>Create Sub-Category</span>
 							</transition>
 						</button>
 					</div>
@@ -36,19 +45,21 @@
 </template>
 <script>
 	export default {
-		name: "create-caterory",
+		name: "create-sub-caterory",
 		head() {
 			return {
-				title: `Create Caterory - ${this.appName}`,
+				title: `Create Sub Caterory - ${this.appName}`,
 			};
 		},
 
 		data() {
 			return {
 				form: {
+					categoryId: "",
 					name: "",
 					status: true,
 				},
+				categories: [],
 				errors: {},
 				click: true,
 				loading: false,
@@ -56,11 +67,22 @@
 		},
 
 		methods: {
+			getCategoryList() {
+				this.$axios.get("category-list").then(
+					(response) => {
+						this.categories = response.data.categories;
+					},
+					(error) => {
+						$nuxt.$emit("error", error);
+					}
+				);
+			},
+
 			//Submit Form
 			submit() {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post("create-category", this.form).then(
+					this.$axios.post("create-sub-category", this.form).then(
 						(response) => {
 							$nuxt.$emit("success", response.data);
 							this.click = true;
@@ -72,6 +94,10 @@
 					);
 				}
 			},
+		},
+
+		created() {
+			this.getCategoryList();
 		},
 	};
 </script>

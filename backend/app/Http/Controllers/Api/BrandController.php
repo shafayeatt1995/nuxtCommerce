@@ -52,7 +52,7 @@ class BrandController extends Controller
         if (isset($brand)) {
             return response()->json(compact('brand'));
         } else {
-            return response()->json(['message' => 'Brand not found'], 404);
+            return response()->json(['message' => 'Brand not found'], 422);
         }
     }
 

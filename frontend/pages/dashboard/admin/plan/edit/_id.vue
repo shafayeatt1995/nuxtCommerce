@@ -7,7 +7,7 @@
 		<div class="section-body">
 			<form class="row" @submit.prevent="submit">
 				<div class="col-lg-8">
-					<div class="bg-white p-3 min-h100 card card-primary">
+					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
 							<label for="name">Plan Name</label>
@@ -73,7 +73,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div class="bg-white p-3 min-h100 card card-primary">
+					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">Access Option</h3>
 						<div class="form-group">
 							<label for="inventory">Inventory</label>

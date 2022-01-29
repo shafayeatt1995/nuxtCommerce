@@ -53,12 +53,12 @@
 							<td>{{brand.name}}</td>
 							<td>{{brand.created_at | date}}</td>
 							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-brand-edit-id', params:{id: brand.id}})" class="btn btn-icon btn-primary mx-2 mb-2">
+								<nuxt-link :to="localePath({name: 'dashboard-admin-brand-edit-id', params:{id: brand.id}})" class="btn btn-icon btn-primary mx-2 my-2">
 									<i>
 										<icon :icon="['fas', 'edit']"></icon>
 									</i>
 								</nuxt-link>
-								<button class="btn btn-icon btn-danger mb-2" @click="deleteBrand(brand.id)">
+								<button class="btn btn-icon btn-danger my-2" @click="deleteBrand(brand.id)">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -192,6 +192,10 @@
 			this.$nuxt.$on("triggerBrand", () => {
 				this.getBrand();
 			});
+		},
+
+		beforeDestroy() {
+			this.$nuxt.$off("triggerBrand");
 		},
 	};
 </script>

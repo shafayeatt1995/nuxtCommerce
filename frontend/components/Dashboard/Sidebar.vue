@@ -76,7 +76,35 @@
 								<nuxt-link :to="localePath('dashboard-admin-category')">Category</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-brand-create')">Sub Category</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-admin-category-sub')">Sub Category</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-category-child')">Child Category</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="productOptions || route.substring(17, 32) === 'product-options' ? 'dropdown-active' : ''" @click.prevent="productOptions = !productOptions">
+						<i>
+							<icon :icon="['fas', 'tags']"></icon>
+						</i>
+						<span>Product Options
+							<i :class="category">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="productOptions || route.substring(17, 32) === 'product-options'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-product-options-material')">Material</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-category-sub')">Sub Category</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-category-child')">Child Category</nuxt-link>
 							</li>
 						</ul>
 					</transition>
@@ -97,6 +125,7 @@
 				plan: false,
 				brand: false,
 				category: false,
+				productOptions: false,
 			};
 		},
 

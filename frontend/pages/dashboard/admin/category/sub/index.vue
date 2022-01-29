@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Categories</h1>
-			<nuxt-link :to="localePath('dashboard-admin-category-create')" class="btn btn-primary">Create Category</nuxt-link>
+			<h1>Sub-Categories</h1>
+			<nuxt-link :to="localePath('dashboard-admin-category-sub-create')" class="btn btn-primary">Create Sub-Category</nuxt-link>
 		</div>
 
 		<div class="section-body">
@@ -33,7 +33,8 @@
 							<th scope="col">
 								<input class="form-check-input" type="checkbox" @click="select.length >= 1 ? deselectall():selectAll()" :checked="select.length >= 1">
 							</th>
-							<th scope="col">Name</th>
+							<th scope="col">Category</th>
+							<th scope="col">Sub-Category</th>
 							<th scope="col">status</th>
 							<th scope="col">Create At</th>
 							<th scope="col">Action</th>
@@ -49,6 +50,7 @@
 							<th scope="row">
 								<input class="form-check-input" type="checkbox" v-model="select" :value="category.id">
 							</th>
+							<td>{{category.category.name}}</td>
 							<td>{{category.name}}</td>
 							<td>
 								<button class="badge badge-success color-black" type="button" @click="changeStatus(category.id)" v-if="category.status">Active</button>
@@ -56,12 +58,12 @@
 							</td>
 							<td>{{category.created_at | date}}</td>
 							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-category-edit-id', params:{id: category.id}})" class="btn btn-icon btn-primary mx-2 mb-2">
+								<nuxt-link :to="localePath({name: 'dashboard-admin-category-sub-edit-id', params:{id: category.id}})" class="btn btn-icon btn-primary mx-2 my-2">
 									<i>
 										<icon :icon="['fas', 'edit']"></icon>
 									</i>
 								</nuxt-link>
-								<button class="btn btn-icon btn-danger mb-2" @click="deleteCategory(category.id)">
+								<button class="btn btn-icon btn-danger my-2" @click="deleteCategory(category.id)">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -71,7 +73,7 @@
 					</tbody>
 					<tbody v-else>
 						<td colspan="8" class="pt-3">
-							<Not-found message="No category found" />
+							<Not-found message="No sub category found" />
 						</td>
 					</tbody>
 				</table>
@@ -82,10 +84,10 @@
 </template>
 <script>
 	export default {
-		name: "all-categories",
+		name: "all-sub-categories",
 		head() {
 			return {
-				title: `Categories - ${this.appName}`,
+				title: `Sub Categories - ${this.appName}`,
 			};
 		},
 		data() {
@@ -104,7 +106,7 @@
 		methods: {
 			//Get category
 			getCategory() {
-				this.$axios.get("category").then(
+				this.$axios.get("sub-category").then(
 					(response) => {
 						this.categories = response.data.categories;
 						this.loading = false;
@@ -115,7 +117,7 @@
 				);
 			},
 			getResults(page = 1) {
-				this.$axios.get("category?page=" + page).then((response) => {
+				this.$axios.get("sub-category?page=" + page).then((response) => {
 					this.categories = response.data.categories;
 				});
 			},
@@ -138,11 +140,11 @@
 							if (result.isConfirmed) {
 								let list = id ? [id] : this.select;
 								this.$axios
-									.post("delete-category", { idList: list })
+									.post("delete-sub-category", { idList: list })
 									.then(
 										(response) => {
 											this.select = [];
-											$nuxt.$emit("triggerCategory");
+											$nuxt.$emit("triggerSubCategory");
 											$nuxt.$emit("success", response.data);
 											this.click = true;
 										},
@@ -171,11 +173,12 @@
 				this.select = [];
 			},
 
+			//Search item
 			search() {
 				if (this.click) {
 					this.click = false;
 					this.loading = true;
-					this.$axios.post("search-category", this.searchOption).then(
+					this.$axios.post("search-sub-category", this.searchOption).then(
 						(response) => {
 							this.categories = response.data.categories;
 							this.loading = false;
@@ -192,9 +195,9 @@
 			changeStatus(id) {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post(`status-category/${id}`).then(
+					this.$axios.post(`status-sub-category/${id}`).then(
 						(response) => {
-							$nuxt.$emit("triggerCategory");
+							$nuxt.$emit("triggerSubCategory");
 							this.click = true;
 						},
 						(error) => {
@@ -208,12 +211,13 @@
 
 		created() {
 			this.getCategory();
-			this.$nuxt.$on("triggerCategory", () => {
+			this.$nuxt.$on("triggerSubCategory", () => {
 				this.getCategory();
 			});
 		},
+
 		beforeDestroy() {
-			this.$nuxt.$off("triggerCategory");
+			this.$nuxt.$off("triggerSubCategory");
 		},
 	};
 </script>

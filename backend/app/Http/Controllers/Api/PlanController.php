@@ -30,11 +30,11 @@ class PlanController extends Controller
 			'productLimit' => 'required|numeric',
 			'storageLimit' => 'required|numeric',
 			'variationLimit' => 'required|numeric',
-			'inventory' => 'required',
-			'pos' => 'required',
-			'support' => 'required',
-			'qrCode' => 'required',
-			'status' => 'required',
+			'inventory' => 'required|boolean',
+			'pos' => 'required|boolean',
+			'support' => 'required|boolean',
+			'qrCode' => 'required|boolean',
+			'status' => 'required|boolean',
 		]);
 
 		$plan = new Plan();
@@ -66,7 +66,7 @@ class PlanController extends Controller
 		if (isset($plan)) {
 			return response()->json(compact('plan'));
 		} else {
-			return response()->json(['message' => 'Plan not found'], 404);
+			return response()->json(['message' => 'Plan not found'], 422);
 		}
 	}
 
@@ -84,11 +84,11 @@ class PlanController extends Controller
 			'productLimit' => 'required|numeric',
 			'storageLimit' => 'required|numeric',
 			'variationLimit' => 'required|numeric',
-			'inventory' => 'required',
+			'inventory' => 'required|boolean',
 			'pos' => 'required',
-			'support' => 'required',
-			'qrCode' => 'required',
-			'status' => 'required',
+			'support' => 'required|boolean',
+			'qrCode' => 'required|boolean',
+			'status' => 'required|boolean',
 		]);
 
 		$plan = Plan::where('id', $id)->first();
@@ -124,7 +124,7 @@ class PlanController extends Controller
 			if (isset($plan)) {
 				$plan->delete();
 			} else {
-				return response()->json(['message' => 'Plan not deleted'], 404);
+				return response()->json(['message' => 'Plan not deleted'], 422);
 			}
 		}
 		return response()->json('Plan successfully deleted');

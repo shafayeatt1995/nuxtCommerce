@@ -190,6 +190,10 @@ button {
 	cursor: pointer;
 }
 
+p.invalid-feedback {
+	margin: 0 !important;
+}
+
 /* 3.2 Form */
 .form-control,
 .input-group-text,
@@ -988,31 +992,31 @@ select.form-control:not([size]):not([multiple]) {
 	background-position: center;
 }
 
-.card.card-primary {
+.card-primary {
 	border-top: 2px solid #6777ef;
 }
 
-.card.card-secondary {
+.card-secondary {
 	border-top: 2px solid #34395e;
 }
 
-.card.card-success {
+.card-success {
 	border-top: 2px solid #63ed7a;
 }
 
-.card.card-danger {
+.card-danger {
 	border-top: 2px solid #fc544b;
 }
 
-.card.card-warning {
+.card-warning {
 	border-top: 2px solid #6777ef;
 }
 
-.card.card-info {
+.card-info {
 	border-top: 2px solid #3abaf4;
 }
 
-.card.card-dark {
+.card-dark {
 	border-top: 2px solid #191d21;
 }
 
