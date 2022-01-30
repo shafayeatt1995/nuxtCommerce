@@ -82,6 +82,7 @@
 			submit() {
 				if (this.click) {
 					this.click = false;
+					this.errors = {};
 
 					const config = {
 						headers: { "content-type": "multipart/form-data" },

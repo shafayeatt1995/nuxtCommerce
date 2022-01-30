@@ -8,34 +8,12 @@
 			</div>
 			<ul class="sidebar-menu">
 				<li>
-					<nuxt-link :to="localePath('dashboard')" class="nav-link" :class="active">
+					<nuxt-link :to="localePath('dashboard')" class="nav-link">
 						<i>
 							<icon :icon="['fas', 'tachometer-alt']"></icon>
 						</i>
 						<span>Dashboard</span>
 					</nuxt-link>
-				</li>
-				<li class="sidebar-dropdown">
-					<a href="#" class="has-dropdown" :class="plan || route.substring(17, 21) === 'plan' ? 'dropdown-active' : ''" @click.prevent="plan = !plan">
-						<i>
-							<icon :icon="['fas', 'box-open']"></icon>
-						</i>
-						<span>Plan
-							<i :class="plan">
-								<icon :icon="['fas', 'chevron-right']"></icon>
-							</i>
-						</span>
-					</a>
-					<transition name="slide" mode="out-in">
-						<ul class="sidebar-dropdown-menu" v-if="plan || route.substring(17, 21) === 'plan'">
-							<li>
-								<nuxt-link :to="localePath('dashboard-admin-plan')">All Plan</nuxt-link>
-							</li>
-							<li>
-								<nuxt-link :to="localePath('dashboard-admin-plan-create')">Create Plan</nuxt-link>
-							</li>
-						</ul>
-					</transition>
 				</li>
 				<li class="sidebar-dropdown">
 					<a href="#" class="has-dropdown" :class="brand || route.substring(17, 22) === 'brand' ? 'dropdown-active' : ''" @click.prevent="brand = !brand">
@@ -62,7 +40,7 @@
 				<li class="sidebar-dropdown">
 					<a href="#" class="has-dropdown" :class="category || route.substring(17, 25) === 'category' ? 'dropdown-active' : ''" @click.prevent="category = !category">
 						<i>
-							<icon :icon="['fas', 'tags']"></icon>
+							<icon :icon="['far', 'list-alt']"></icon>
 						</i>
 						<span>Category
 							<i :class="category">
@@ -87,7 +65,7 @@
 				<li class="sidebar-dropdown">
 					<a href="#" class="has-dropdown" :class="productOptions || route.substring(17, 32) === 'product-options' ? 'dropdown-active' : ''" @click.prevent="productOptions = !productOptions">
 						<i>
-							<icon :icon="['fas', 'tags']"></icon>
+							<icon :icon="['fas', 'tasks']"></icon>
 						</i>
 						<span>Product Options
 							<i :class="category">
@@ -101,13 +79,43 @@
 								<nuxt-link :to="localePath('dashboard-admin-product-options-material')">Material</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-category-sub')">Sub Category</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-admin-product-options-color')">Color Family</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-category-child')">Child Category</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-admin-product-options-size')">Size</nuxt-link>
 							</li>
 						</ul>
 					</transition>
+				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="currency || route.substring(17, 25) === 'currency' ? 'dropdown-active' : ''" @click.prevent="currency = !currency">
+						<i>
+							<icon :icon="['far', 'money-bill-alt']"></icon>
+						</i>
+						<span>Currency
+							<i :class="currency">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="currency || route.substring(17, 25) === 'currency'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-currency-create')">Create Currency</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-currency')">All Currency</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
+				<li>
+					<nuxt-link :to="localePath('dashboard-admin-commission')" class="nav-link">
+						<i>
+							<icon :icon="['fas', 'percent']"></icon>
+						</i>
+						<span>Commission</span>
+					</nuxt-link>
 				</li>
 			</ul>
 		</aside>
@@ -126,6 +134,7 @@
 				brand: false,
 				category: false,
 				productOptions: false,
+				currency: false,
 			};
 		},
 

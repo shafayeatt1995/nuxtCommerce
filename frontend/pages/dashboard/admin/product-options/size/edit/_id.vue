@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Create Sub-Category</h1>
+			<h1>Edit Size</h1>
 		</div>
 
 		<div class="section-body">
@@ -26,7 +26,7 @@
 							<p class="invalid-feedback" v-if="errors.subCategoryId">{{errors.subCategoryId[0]}}</p>
 						</div>
 						<div class="form-group">
-							<label for="name">Child-Category Name</label>
+							<label for="name">Size Name</label>
 							<input type="text" class="form-control" id="name" v-model="form.name">
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
 						</div>
@@ -38,10 +38,10 @@
 							</select>
 							<p class="invalid-feedback" v-if="errors.status">{{errors.status[0]}}</p>
 						</div>
-						<button type="submit" class="btn btn-primary">
+						<button type="submit" class="btn btn-primary mt-5">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Create Child-Category</span>
+								<span v-else>Update Size</span>
 							</transition>
 						</button>
 					</div>
@@ -52,10 +52,10 @@
 </template>
 <script>
 	export default {
-		name: "create-sub-category",
+		name: "edit-size",
 		head() {
 			return {
-				title: `Create Sub Category - ${this.appName}`,
+				title: `Edit Size - ${this.appName}`,
 			};
 		},
 
@@ -76,10 +76,17 @@
 		},
 
 		methods: {
-			getCategoryList() {
-				this.$axios.get("category-list").then(
+			// Get Size
+			editSize() {
+				this.$axios.get(`edit-size/${this.$route.params.id}`).then(
 					(response) => {
+						this.form.categoryId = response.data.size.category_id;
+						this.form.subCategoryId =
+							response.data.size.sub_category_id;
+						this.form.name = response.data.size.name;
+						this.form.status = response.data.size.status;
 						this.categories = response.data.categories;
+						this.subCategories = response.data.subCategories;
 					},
 					(error) => {
 						$nuxt.$emit("error", error);
@@ -104,23 +111,29 @@
 			submit() {
 				if (this.click) {
 					this.click = false;
-					this.errors = {};
-					this.$axios.post("create-child-category", this.form).then(
-						(response) => {
-							$nuxt.$emit("success", response.data);
-							this.click = true;
-						},
-						(error) => {
-							this.errors = error.response.data.errors;
-							this.click = true;
-						}
-					);
+					this.$axios
+						.post(`update-size/${this.$route.params.id}`, this.form)
+						.then(
+							(response) => {
+								$nuxt.$emit("success", response.data);
+								this.click = true;
+								this.$router.push(
+									this.localePath(
+										"dashboard-admin-product-options-size"
+									)
+								);
+							},
+							(error) => {
+								this.errors = error.response.data.errors;
+								this.click = true;
+							}
+						);
 				}
 			},
 		},
 
 		created() {
-			this.getCategoryList();
+			this.editSize();
 		},
 	};
 </script>

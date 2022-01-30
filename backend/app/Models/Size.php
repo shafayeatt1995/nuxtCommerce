@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ChildCategory extends Model
+class Size extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'sub_category_id', 'name', 'status'];
+    protected $fillable = ['name', 'status'];
     protected $casts = ['status' => 'boolean'];
 
     public function category()
@@ -22,8 +22,8 @@ class ChildCategory extends Model
         return $this->belongsTo(SubCategory::class);
     }
 
-    public function sizes()
+    public function childCategory()
     {
-        return $this->hasMany(Size::class);
+        return $this->belongsTo(ChildCategory::class);
     }
 }

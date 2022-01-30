@@ -18,18 +18,11 @@ class ChildCategoryController extends Controller
         return response()->json(compact('categories'));
     }
 
-    public function categoryList()
+    public function childCategoryList($id)
     {
         $this->authorize('admin');
-        $categories = Category::orderBy('name')->get();
-        return response()->json(compact('categories'));
-    }
-
-    public function subCategoryList($id)
-    {
-        $this->authorize('admin');
-        $subCategories = SubCategory::where('category_id', $id)->orderBy('name')->get();
-        return response()->json(compact('subCategories'));
+        $childCategories = ChildCategory::where('sub_category_id', $id)->orderBy('name')->get();
+        return response()->json(compact('childCategories'));
     }
 
     public function createChildCategory(Request $request)

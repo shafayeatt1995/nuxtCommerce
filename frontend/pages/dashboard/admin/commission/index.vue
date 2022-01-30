@@ -1,20 +1,12 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Categories</h1>
-			<nuxt-link :to="localePath('dashboard-admin-category-create')" class="btn btn-primary">Create Category</nuxt-link>
+			<h1>Commission</h1>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
-				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
-					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCategory() : ''">
-						<select class="form-control" v-model="action">
-							<option value="">Select a option</option>
-							<option value="delete">Delete selected items</option>
-						</select>
-						<button type="submit" class="btn btn-primary">Apply Action</button>
-					</form>
+				<div class="d-flex w-100 justify-content-end flex-lg-row flex-column">
 					<form class="d-flex mb-3" @submit.prevent="search">
 						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword">
 						<select class="form-control" v-model="searchOption.collum">
@@ -30,12 +22,9 @@
 				<table class="table table-striped text-center table-responsive-md">
 					<thead>
 						<tr>
-							<th scope="col">
-								<input class="form-check-input" type="checkbox" @click="select.length >= 1 ? deselectall():selectAll()" :checked="select.length >= 1">
-							</th>
-							<th scope="col">Name</th>
-							<th scope="col">status</th>
-							<th scope="col">Create At</th>
+							<th scope="col">Category</th>
+							<th scope="col">Commission</th>
+							<th scope="col">Commission Form</th>
 							<th scope="col">Action</th>
 						</tr>
 					</thead>
@@ -44,14 +33,17 @@
 							<Loader />
 						</td>
 					</tbody>
-					<tbody class="text-center" v-else-if="categories.data && categories.data.length >= 1">
-						<tr v-for="category in categories.data" :key="category.id">
-							<th scope="row">
-								<input class="form-check-input" type="checkbox" v-model="select" :value="category.id">
-							</th>
-							<td>{{category.name}}</td>
+					<tbody class="text-center" v-else-if="subCategories.data && subCategories.data.length >= 1">
+						<tr v-for="sub in subCategories.data" :key="sub.id">
 							<td>
-								<button class="badge badge-success color-black" type="button" @click="changeStatus(category.id)" v-if="category.status">Active</button>
+								{{sub.category.name}}
+								<i>
+									<icon :icon="['fas', 'arrow-right']"></icon>
+								</i>
+								{{sub.name}}
+							</td>
+							<td>
+								<span class="badge badge-success color-black" type="button" v-if="sub.commission">{{sub.commission}}</span>
 								<button class="badge badge-danger" type="button" @click="changeStatus(category.id)" v-else>Deactive</button>
 							</td>
 							<td>{{category.created_at | date}}</td>
@@ -91,7 +83,7 @@
 		data() {
 			return {
 				click: true,
-				categories: {},
+				subCategories: {},
 				select: [],
 				action: "",
 				searchOption: {

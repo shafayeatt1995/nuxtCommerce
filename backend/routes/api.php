@@ -32,6 +32,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     //Category Controller
     Route::get('category', 'CategoryController@index');
+    Route::get('category-list', 'CategoryController@categoryList');
     Route::get('edit-category/{id}', 'CategoryController@editCategory');
     Route::post('create-category', 'CategoryController@createCategory');
     Route::post('update-category/{id}', 'CategoryController@updateCategory');
@@ -41,6 +42,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     //Sub Category Controller
     Route::get('sub-category', 'SubCategoryController@index');
+    Route::get('sub-category-list/{id}', 'SubCategoryController@subCategoryList');
     Route::get('category-list', 'SubCategoryController@categoryList');
     Route::get('edit-sub-category/{id}', 'SubCategoryController@editSubCategory');
     Route::post('create-sub-category', 'SubCategoryController@createSubCategory');
@@ -51,8 +53,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     //Child Category Controller
     Route::get('child-category', 'ChildCategoryController@index');
-    Route::get('category-list', 'ChildCategoryController@categoryList');
-    Route::get('sub-category-list/{id}', 'ChildCategoryController@subCategoryList');
+    Route::get('child-category-list/{id}', 'ChildCategoryController@childCategoryList');
     Route::get('edit-child-category/{id}', 'ChildCategoryController@editChildCategory');
     Route::post('create-child-category', 'ChildCategoryController@createChildCategory');
     Route::post('update-child-category/{id}', 'ChildCategoryController@updateChildCategory');
@@ -68,6 +69,37 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('delete-material', 'MaterialController@deleteMaterial');
     Route::post('search-material', 'MaterialController@searchMaterial');
     Route::post('status-material/{id}', 'MaterialController@statusMaterial');
+
+    //Color Controller
+    Route::get('color', 'ColorController@index');
+    Route::get('edit-color/{id}', 'ColorController@editColor');
+    Route::post('create-color', 'ColorController@createColor');
+    Route::post('update-color/{id}', 'ColorController@updateColor');
+    Route::post('delete-color', 'ColorController@deleteColor');
+    Route::post('search-color', 'ColorController@searchColor');
+    Route::post('status-color/{id}', 'ColorController@statusColor');
+
+    //Size Controller
+    Route::get('size', 'SizeController@index');
+    Route::get('edit-size/{id}', 'SizeController@editSize');
+    Route::post('create-size', 'SizeController@createSize');
+    Route::post('update-size/{id}', 'SizeController@updateSize');
+    Route::post('delete-size', 'SizeController@deleteSize');
+    Route::post('search-size', 'SizeController@searchSize');
+    Route::post('status-size/{id}', 'SizeController@statusSize');
+
+    //Currency Controller
+    Route::get('currency', 'CurrencyController@index');
+    Route::get('edit-currency/{id}', 'CurrencyController@editCurrency');
+    Route::post('create-currency', 'CurrencyController@createCurrency');
+    Route::post('update-currency/{id}', 'CurrencyController@updateCurrency');
+    Route::post('delete-currency', 'CurrencyController@deleteCurrency');
+    Route::post('search-currency', 'CurrencyController@searchCurrency');
+    Route::post('status-currency/{id}', 'CurrencyController@statusCurrency');
+    Route::post('default-currency/{id}', 'CurrencyController@defaultCurrency');
+
+    //Commission Controller
+    Route::get('commission', 'CommissionController@index');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

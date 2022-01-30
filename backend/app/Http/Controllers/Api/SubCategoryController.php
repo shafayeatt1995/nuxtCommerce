@@ -17,6 +17,13 @@ class SubCategoryController extends Controller
         return response()->json(compact('categories'));
     }
 
+    public function subCategoryList($id)
+    {
+        $this->authorize('admin');
+        $subCategories = SubCategory::where('category_id', $id)->orderBy('name')->get();
+        return response()->json(compact('subCategories'));
+    }
+
     public function categoryList()
     {
         $this->authorize('admin');

@@ -3898,4 +3898,10 @@ body.layout-3 .main-footer {
 	cursor: pointer;
 }
 
+.color-plate {
+	height: 15px;
+	width: 100%;
+	display: block;
+}
+
 /*# sourceMappingURL=style.css.map */

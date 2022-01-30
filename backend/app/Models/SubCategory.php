@@ -21,4 +21,14 @@ class SubCategory extends Model
     {
         return $this->hasMany(ChildCategory::class);
     }
+
+    public function sizes()
+    {
+        return $this->hasMany(Size::class);
+    }
+
+    public function commission()
+    {
+        return $this->belongsTo(Commission::class);
+    }
 }

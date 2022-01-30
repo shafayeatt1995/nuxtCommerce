@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Categories</h1>
-			<nuxt-link :to="localePath('dashboard-admin-category-create')" class="btn btn-primary">Create Category</nuxt-link>
+			<h1>Currency</h1>
+			<nuxt-link :to="localePath('dashboard-admin-currency-create')" class="btn btn-primary">Create Currency</nuxt-link>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
 				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
-					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCategory() : ''">
+					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCurrency() : ''">
 						<select class="form-control" v-model="action">
 							<option value="">Select a option</option>
 							<option value="delete">Delete selected items</option>
@@ -19,6 +19,7 @@
 						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword">
 						<select class="form-control" v-model="searchOption.collum">
 							<option value="name">Search by name</option>
+							<option value="country">Search by country</option>
 						</select>
 						<button type="submit" class="btn btn-primary">
 							<i>
@@ -33,9 +34,10 @@
 							<th scope="col">
 								<input class="form-check-input" type="checkbox" @click="select.length >= 1 ? deselectall():selectAll()" :checked="select.length >= 1">
 							</th>
-							<th scope="col">Name</th>
+							<th scope="col">Currency</th>
+							<th scope="col">Exchange Rate</th>
 							<th scope="col">status</th>
-							<th scope="col">Create At</th>
+							<th scope="col">Default</th>
 							<th scope="col">Action</th>
 						</tr>
 					</thead>
@@ -44,24 +46,28 @@
 							<Loader />
 						</td>
 					</tbody>
-					<tbody class="text-center" v-else-if="categories.data && categories.data.length >= 1">
-						<tr v-for="category in categories.data" :key="category.id">
+					<tbody class="text-center" v-else-if="currencies.data && currencies.data.length >= 1">
+						<tr v-for="currency in currencies.data" :key="currency.id">
 							<th scope="row">
-								<input class="form-check-input" type="checkbox" v-model="select" :value="category.id">
+								<input class="form-check-input" type="checkbox" v-model="select" :value="currency.id">
 							</th>
-							<td>{{category.name}}</td>
+							<td>{{currency.country}} ({{currency.name}})</td>
+							<td>{{currency.symble}} {{currency.rate | currency}}</td>
 							<td>
-								<button class="badge badge-success color-black" type="button" @click="changeStatus(category.id)" v-if="category.status">Active</button>
-								<button class="badge badge-danger" type="button" @click="changeStatus(category.id)" v-else>Deactive</button>
+								<button class="badge badge-success color-black" type="button" @click="changeStatus(currency.id)" v-if="currency.status">Active</button>
+								<button class="badge badge-danger" type="button" @click="changeStatus(currency.id)" v-else>Deactive</button>
 							</td>
-							<td>{{category.created_at | date}}</td>
 							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-category-edit-id', params:{id: category.id}})" class="btn btn-icon btn-primary mx-2 my-2">
+								<button class="badge badge-success color-black" type="button" v-if="currency.default">Default</button>
+								<button class="badge badge-danger" type="button" @click="changeDefault(currency.id)" v-else>Make Default</button>
+							</td>
+							<td>
+								<nuxt-link :to="localePath({name: 'dashboard-admin-currency-edit-id', params:{id: currency.id}})" class="btn btn-icon btn-primary mx-2 my-2">
 									<i>
 										<icon :icon="['fas', 'edit']"></icon>
 									</i>
 								</nuxt-link>
-								<button class="btn btn-icon btn-danger my-2" @click="deleteCategory(category.id)">
+								<button class="btn btn-icon btn-danger my-2" @click="deleteCurrency(currency.id)">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -71,27 +77,27 @@
 					</tbody>
 					<tbody v-else>
 						<td colspan="8" class="pt-3">
-							<Not-found message="No category found" />
+							<Not-found message="No Currency found" />
 						</td>
 					</tbody>
 				</table>
-				<pagination :data="categories" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
+				<pagination :data="currencies" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 	export default {
-		name: "all-categories",
+		name: "all-currencies",
 		head() {
 			return {
-				title: `Categories - ${this.appName}`,
+				title: `Currencies - ${this.appName}`,
 			};
 		},
 		data() {
 			return {
 				click: true,
-				categories: {},
+				currencies: {},
 				select: [],
 				action: "",
 				searchOption: {
@@ -102,11 +108,11 @@
 			};
 		},
 		methods: {
-			//Get category
-			getCategory() {
-				this.$axios.get("category").then(
+			//Get Currency
+			getCurrency() {
+				this.$axios.get("currency").then(
 					(response) => {
-						this.categories = response.data.categories;
+						this.currencies = response.data.currencies;
 						this.loading = false;
 					},
 					(error) => {
@@ -115,13 +121,13 @@
 				);
 			},
 			getResults(page = 1) {
-				this.$axios.get("category?page=" + page).then((response) => {
-					this.categories = response.data.categories;
+				this.$axios.get("currency?page=" + page).then((response) => {
+					this.currencies = response.data.currencies;
 				});
 			},
 
 			//Confirm Delete
-			deleteCategory(id) {
+			deleteCurrency(id) {
 				if (this.click) {
 					this.click = false;
 					this.$swal
@@ -138,11 +144,11 @@
 							if (result.isConfirmed) {
 								let list = id ? [id] : this.select;
 								this.$axios
-									.post("delete-category", { idList: list })
+									.post("delete-currency", { idList: list })
 									.then(
 										(response) => {
 											this.select = [];
-											$nuxt.$emit("triggerCategory");
+											$nuxt.$emit("triggerCurrency");
 											$nuxt.$emit("success", response.data);
 											this.click = true;
 										},
@@ -161,8 +167,8 @@
 			// Select All Data
 			selectAll() {
 				this.select = [];
-				this.categories.data.forEach((category) => {
-					this.select.push(category.id);
+				this.currencies.data.forEach((currency) => {
+					this.select.push(currency.id);
 				});
 			},
 
@@ -175,9 +181,9 @@
 				if (this.click) {
 					this.click = false;
 					this.loading = true;
-					this.$axios.post("search-category", this.searchOption).then(
+					this.$axios.post("search-currency", this.searchOption).then(
 						(response) => {
-							this.categories = response.data.categories;
+							this.currencies = response.data.currencies;
 							this.loading = false;
 							this.click = true;
 						},
@@ -192,9 +198,25 @@
 			changeStatus(id) {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post(`status-category/${id}`).then(
+					this.$axios.post(`status-currency/${id}`).then(
 						(response) => {
-							$nuxt.$emit("triggerCategory");
+							$nuxt.$emit("triggerCurrency");
+							this.click = true;
+						},
+						(error) => {
+							$nuxt.$emit("error", error);
+							this.click = true;
+						}
+					);
+				}
+			},
+
+			changeDefault(id) {
+				if (this.click) {
+					this.click = false;
+					this.$axios.post(`default-currency/${id}`).then(
+						(response) => {
+							$nuxt.$emit("triggerCurrency");
 							this.click = true;
 						},
 						(error) => {
@@ -207,14 +229,14 @@
 		},
 
 		created() {
-			this.getCategory();
-			this.$nuxt.$on("triggerCategory", () => {
-				this.getCategory();
+			this.getCurrency();
+			this.$nuxt.$on("triggerCurrency", () => {
+				this.getCurrency();
 			});
 		},
 
 		beforeDestroy() {
-			this.$nuxt.$off("triggerCategory");
+			this.$nuxt.$off("triggerCurrency");
 		},
 	};
 </script>

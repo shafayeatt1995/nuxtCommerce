@@ -16,6 +16,13 @@ class CategoryController extends Controller
         return response()->json(compact('categories'));
     }
 
+    public function categoryList()
+    {
+        $this->authorize('admin');
+        $categories = Category::orderBy('name')->get();
+        return response()->json(compact('categories'));
+    }
+
     public function createCategory(Request $request)
     {
         $this->authorize('admin');

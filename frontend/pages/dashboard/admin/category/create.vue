@@ -36,10 +36,10 @@
 </template>
 <script>
 	export default {
-		name: "create-caterory",
+		name: "create-category",
 		head() {
 			return {
-				title: `Create Caterory - ${this.appName}`,
+				title: `Create Category - ${this.appName}`,
 			};
 		},
 
@@ -60,6 +60,7 @@
 			submit() {
 				if (this.click) {
 					this.click = false;
+					this.errors = {};
 					this.$axios.post("create-category", this.form).then(
 						(response) => {
 							$nuxt.$emit("success", response.data);

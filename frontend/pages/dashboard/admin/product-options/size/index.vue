@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Plans</h1>
-			<nuxt-link :to="localePath('dashboard-admin-plan-create')" class="btn btn-primary">Create Plan</nuxt-link>
+			<h1>Size</h1>
+			<nuxt-link :to="localePath('dashboard-admin-product-options-size-create')" class="btn btn-primary">Create Size</nuxt-link>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
 				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
-					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deletePlan() : ''">
+					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteSize() : ''">
 						<select class="form-control" v-model="action">
 							<option value="">Select a option</option>
 							<option value="delete">Delete selected items</option>
@@ -27,17 +27,14 @@
 						</button>
 					</form>
 				</div>
-				<table class="table table-striped text-center table-responsive-lg">
+				<table class="table table-striped text-center table-responsive-md">
 					<thead>
 						<tr>
 							<th scope="col">
 								<input class="form-check-input" type="checkbox" @click="select.length >= 1 ? deselectall():selectAll()" :checked="select.length >= 1">
 							</th>
+							<th scope="col">Category</th>
 							<th scope="col">Name</th>
-							<th scope="col">Duration</th>
-							<th scope="col">Price</th>
-							<th scope="col">Discount Status</th>
-							<th scope="col">User</th>
 							<th scope="col">Status</th>
 							<th scope="col">Create At</th>
 							<th scope="col">Action</th>
@@ -48,34 +45,30 @@
 							<Loader />
 						</td>
 					</tbody>
-					<tbody class="text-center" v-else-if="plans.data && plans.data.length >= 1">
-						<tr v-for="plan in plans.data" :key="plan.id">
+					<tbody class="text-center" v-else-if="sizes.data && sizes.data.length >= 1">
+						<tr v-for="size in sizes.data" :key="size.id">
 							<th scope="row">
-								<input class="form-check-input" type="checkbox" v-model="select" :value="plan.id">
+								<input class="form-check-input" type="checkbox" v-model="select" :value="size.id">
 							</th>
-							<td>{{plan.name}}</td>
-							<td>{{plan.duration_name}} ({{plan.duration_day}} Days)</td>
-							<td>
-								<span v-if="plan.discount_price">${{plan.discount_price | currency}} <del class="ml-1">${{plan.price | currency}}</del></span>
-								<span v-else>${{plan.price | currency}}</span>
+							<td>{{size.category.name}}
+								<i>
+									<icon :icon="['fas', 'arrow-right']"></icon>
+								</i>
+								{{size.sub_category.name}}
 							</td>
+							<td>{{size.name}}</td>
 							<td>
-								<span class="badge" :class="new Date() < new Date(plan.discount_start) ? 'badge-warning color-black' : new Date() > new Date(plan.discount_end) ? 'badge-danger' : 'badge-success color-black'" v-if="plan.discount_price">{{new Date() < new Date(plan.discount_start) ? `Discount will start after ${Math.abs(Math.floor((new Date() - new Date(plan.discount_start)) / (1000 * 60 * 60 * 24)))} days` : new Date() > new Date(plan.discount_end) ? 'Discount Expire' : 'Discounts Running'}}</span>
-								<span class="badge badge-danger" v-else>No Discount</span>
+								<button class="badge badge-success color-black" type="button" @click="changeStatus(size.id)" v-if="size.status">Active</button>
+								<button class="badge badge-danger" type="button" @click="changeStatus(size.id)" v-else>Deactive</button>
 							</td>
-							<td>0</td>
+							<td>{{size.created_at | date}}</td>
 							<td>
-								<button class="badge badge-success color-black" type="button" @click="changeStatus(plan.id)" v-if="plan.status">Active</button>
-								<button class="badge badge-danger" type="button" @click="changeStatus(plan.id)" v-else>Deactive</button>
-							</td>
-							<td>{{plan.created_at | date}}</td>
-							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-plan-edit-id', params:{id: plan.id}})" class="btn btn-icon btn-primary mx-2 mb-2">
+								<nuxt-link :to="localePath({name: 'dashboard-admin-product-options-size-edit-id', params:{id: size.id}})" class="btn btn-icon btn-primary mx-2 my-2">
 									<i>
 										<icon :icon="['fas', 'edit']"></icon>
 									</i>
 								</nuxt-link>
-								<button class="btn btn-icon btn-danger mb-2" @click="deletePlan(plan.id)">
+								<button class="btn btn-icon btn-danger my-2" @click="deleteSize(size.id)">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -85,27 +78,27 @@
 					</tbody>
 					<tbody v-else>
 						<td colspan="8" class="pt-3">
-							<Not-found message="No plan found" />
+							<Not-found message="No size found" />
 						</td>
 					</tbody>
 				</table>
-				<pagination :data="plans" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
+				<pagination :data="sizes" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 	export default {
-		name: "all-plans",
+		name: "all-sizes",
 		head() {
 			return {
-				title: `Plans - ${this.appName}`,
+				title: `Size - ${this.appName}`,
 			};
 		},
 		data() {
 			return {
 				click: true,
-				plans: {},
+				sizes: {},
 				select: [],
 				action: "",
 				searchOption: {
@@ -116,11 +109,11 @@
 			};
 		},
 		methods: {
-			//Get Plan
-			getPlan() {
-				this.$axios.get("plan").then(
+			//Get Size
+			getSize() {
+				this.$axios.get("size").then(
 					(response) => {
-						this.plans = response.data.plans;
+						this.sizes = response.data.sizes;
 						this.loading = false;
 					},
 					(error) => {
@@ -129,13 +122,13 @@
 				);
 			},
 			getResults(page = 1) {
-				this.$axios.get("plan?page=" + page).then((response) => {
-					this.plans = response.data.plans;
+				this.$axios.get("size?page=" + page).then((response) => {
+					this.sizes = response.data.sizes;
 				});
 			},
 
 			//Confirm Delete
-			deletePlan(id) {
+			deleteSize(id) {
 				if (this.click) {
 					this.click = false;
 					this.$swal
@@ -152,11 +145,11 @@
 							if (result.isConfirmed) {
 								let list = id ? [id] : this.select;
 								this.$axios
-									.post("delete-plan", { idList: list })
+									.post("delete-size", { idList: list })
 									.then(
 										(response) => {
 											this.select = [];
-											$nuxt.$emit("triggerPlan");
+											$nuxt.$emit("triggerSize");
 											$nuxt.$emit("success", response.data);
 											this.click = true;
 										},
@@ -175,8 +168,8 @@
 			// Select All Data
 			selectAll() {
 				this.select = [];
-				this.plans.data.forEach((plan) => {
-					this.select.push(plan.id);
+				this.sizes.data.forEach((size) => {
+					this.select.push(size.id);
 				});
 			},
 
@@ -189,9 +182,9 @@
 				if (this.click) {
 					this.click = false;
 					this.loading = true;
-					this.$axios.post("search-plan", this.searchOption).then(
+					this.$axios.post("search-size", this.searchOption).then(
 						(response) => {
-							this.plans = response.data.plans;
+							this.sizes = response.data.sizes;
 							this.loading = false;
 							this.click = true;
 						},
@@ -203,12 +196,13 @@
 				}
 			},
 
+			//Change Status
 			changeStatus(id) {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post(`status-plan/${id}`).then(
+					this.$axios.post(`status-size/${id}`).then(
 						(response) => {
-							$nuxt.$emit("triggerPlan");
+							$nuxt.$emit("triggerSize");
 							this.click = true;
 						},
 						(error) => {
@@ -221,14 +215,14 @@
 		},
 
 		created() {
-			this.getPlan();
-			this.$nuxt.$on("triggerPlan", () => {
-				this.getPlan();
+			this.getSize();
+			this.$nuxt.$on("triggerSize", () => {
+				this.getSize();
 			});
 		},
 
 		beforeDestroy() {
-			this.$nuxt.$off("triggerPlan");
+			this.$nuxt.$off("triggerSize");
 		},
 	};
 </script>

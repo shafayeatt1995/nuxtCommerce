@@ -21,4 +21,9 @@ class Category extends Model
     {
         return $this->hasMany(ChildCategory::class);
     }
+
+    public function sizes()
+    {
+        return $this->hasMany(Size::class);
+    }
 }

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Create Material</h1>
+			<h1>Create Color</h1>
 		</div>
 
 		<div class="section-body">
@@ -10,9 +10,15 @@
 					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
-							<label for="name">Material Name</label>
+							<label for="name">Color Name</label>
 							<input type="text" class="form-control" id="name" v-model="form.name">
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label for="code">Color Code</label>
+							<input type="color" class="form-control" id="code" v-model="form.code">
+							<input type="text" class="form-control mt-2" v-model="form.code">
+							<p class="invalid-feedback" v-if="errors.code">{{errors.code[0]}}</p>
 						</div>
 						<div class="form-group">
 							<label for="status">Status</label>
@@ -25,7 +31,7 @@
 						<button type="submit" class="btn btn-primary mt-5">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Create Material</span>
+								<span v-else>Create Color</span>
 							</transition>
 						</button>
 					</div>
@@ -36,10 +42,10 @@
 </template>
 <script>
 	export default {
-		name: "create-material",
+		name: "create-color",
 		head() {
 			return {
-				title: `Create Material - ${this.appName}`,
+				title: `Create Color - ${this.appName}`,
 			};
 		},
 
@@ -47,6 +53,7 @@
 			return {
 				form: {
 					name: "",
+					code: "#000000",
 					status: true,
 				},
 				errors: {},
@@ -61,7 +68,7 @@
 				if (this.click) {
 					this.click = false;
 					this.errors = {};
-					this.$axios.post("create-material", this.form).then(
+					this.$axios.post("create-color", this.form).then(
 						(response) => {
 							$nuxt.$emit("success", response.data);
 							this.click = true;
