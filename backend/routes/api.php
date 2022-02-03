@@ -110,6 +110,16 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('delete-country', 'CountryController@deleteCountry');
     Route::post('search-country', 'CountryController@searchCountry');
     Route::post('status-country/{id}', 'CountryController@statusCountry');
+
+    //State Controller
+    Route::get('state', 'StateController@index');
+    Route::get('state-list/{id}', 'StateController@stateList');
+    Route::get('edit-state/{id}', 'StateController@editState');
+    Route::post('create-state', 'StateController@createState');
+    Route::post('update-state/{id}', 'StateController@updateState');
+    Route::post('delete-state', 'StateController@deleteState');
+    Route::post('search-state', 'StateController@searchState');
+    Route::post('status-state/{id}', 'StateController@statusState');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

@@ -126,7 +126,10 @@
 								<nuxt-link :to="localePath('dashboard-admin-address-country')">Country</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-currency')">All Currency</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-admin-address-state')">State</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-address-city')">City</nuxt-link>
 							</li>
 						</ul>
 					</transition>
