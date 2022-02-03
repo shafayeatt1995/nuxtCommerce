@@ -15,7 +15,7 @@ class CreateCommissionsTable extends Migration
     {
         Schema::create('commissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sub_category_id');
+            $table->unsignedBigInteger('sub_category_id')->unique();
             $table->boolean('type')->comment('true: fixed, false: percent');
             $table->decimal('commission', 8, 2);
             $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');

@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Categories</h1>
-			<nuxt-link :to="localePath('dashboard-admin-category-create')" class="btn btn-primary">Create Category</nuxt-link>
+			<h1>Countries</h1>
+			<nuxt-link :to="localePath('dashboard-admin-address-country-create')" class="btn btn-primary">Create Country</nuxt-link>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
 				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
-					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCategory() : ''">
+					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCountry() : ''">
 						<select class="form-control" v-model="action">
 							<option value="">Select a option</option>
 							<option value="delete">Delete selected items</option>
@@ -44,24 +44,24 @@
 							<Loader />
 						</td>
 					</tbody>
-					<tbody class="text-center" v-else-if="categories.data && categories.data.length >= 1">
-						<tr v-for="category in categories.data" :key="category.id">
+					<tbody class="text-center" v-else-if="countries.data && countries.data.length >= 1">
+						<tr v-for="country in countries.data" :key="country.id">
 							<th scope="row">
-								<input class="form-check-input" type="checkbox" v-model="select" :value="category.id">
+								<input class="form-check-input" type="checkbox" v-model="select" :value="country.id">
 							</th>
-							<td>{{category.name}}</td>
+							<td>{{country.name}}</td>
 							<td>
-								<button class="badge badge-success color-black" type="button" @click="changeStatus(category.id)" v-if="category.status">Active</button>
-								<button class="badge badge-danger" type="button" @click="changeStatus(category.id)" v-else>Deactive</button>
+								<button class="badge badge-success color-black" type="button" @click="changeStatus(country.id)" v-if="country.status">Active</button>
+								<button class="badge badge-danger" type="button" @click="changeStatus(country.id)" v-else>Deactive</button>
 							</td>
-							<td>{{category.created_at | date}}</td>
+							<td>{{country.created_at | date}}</td>
 							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-category-edit-id', params:{id: category.id}})" class="btn btn-icon btn-primary mx-2 my-2">
+								<nuxt-link :to="localePath({name: 'dashboard-admin-address-country-edit-id', params:{id: country.id}})" class="btn btn-icon btn-primary mx-2 my-2">
 									<i>
 										<icon :icon="['fas', 'edit']"></icon>
 									</i>
 								</nuxt-link>
-								<button class="btn btn-icon btn-danger my-2" @click="deleteCategory(category.id)">
+								<button class="btn btn-icon btn-danger my-2" @click="deleteCountry(country.id)">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -71,27 +71,27 @@
 					</tbody>
 					<tbody v-else>
 						<td colspan="8" class="pt-3">
-							<Not-found message="No category found" />
+							<Not-found message="No country found" />
 						</td>
 					</tbody>
 				</table>
-				<pagination :data="categories" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
+				<pagination :data="countries" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 	export default {
-		name: "all-categories",
+		name: "all-countries",
 		head() {
 			return {
-				title: `Categories - ${this.appName}`,
+				title: `Countries - ${this.appName}`,
 			};
 		},
 		data() {
 			return {
 				click: true,
-				categories: {},
+				countries: {},
 				select: [],
 				action: "",
 				searchOption: {
@@ -102,11 +102,11 @@
 			};
 		},
 		methods: {
-			//Get category
-			getCategory() {
-				this.$axios.get("category").then(
+			//Get Country
+			getCountry() {
+				this.$axios.get("country").then(
 					(response) => {
-						this.categories = response.data.categories;
+						this.countries = response.data.countries;
 						this.loading = false;
 					},
 					(error) => {
@@ -115,13 +115,13 @@
 				);
 			},
 			getResults(page = 1) {
-				this.$axios.get("category?page=" + page).then((response) => {
-					this.categories = response.data.categories;
+				this.$axios.get("country?page=" + page).then((response) => {
+					this.countries = response.data.countries;
 				});
 			},
 
 			//Confirm Delete
-			deleteCategory(id) {
+			deleteCountry(id) {
 				if (this.click) {
 					this.click = false;
 					this.$swal
@@ -138,11 +138,11 @@
 							if (result.isConfirmed) {
 								let list = id ? [id] : this.select;
 								this.$axios
-									.post("delete-category", { idList: list })
+									.post("delete-country", { idList: list })
 									.then(
 										(response) => {
 											this.select = [];
-											$nuxt.$emit("triggerCategory");
+											$nuxt.$emit("triggerCountry");
 											$nuxt.$emit("success", response.data);
 											this.click = true;
 										},
@@ -161,8 +161,8 @@
 			// Select All Data
 			selectAll() {
 				this.select = [];
-				this.categories.data.forEach((category) => {
-					this.select.push(category.id);
+				this.countries.data.forEach((country) => {
+					this.select.push(country.id);
 				});
 			},
 
@@ -175,9 +175,9 @@
 				if (this.click) {
 					this.click = false;
 					this.loading = true;
-					this.$axios.post("search-category", this.searchOption).then(
+					this.$axios.post("search-country", this.searchOption).then(
 						(response) => {
-							this.categories = response.data.categories;
+							this.countries = response.data.countries;
 							this.loading = false;
 							this.click = true;
 						},
@@ -192,9 +192,9 @@
 			changeStatus(id) {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post(`status-category/${id}`).then(
+					this.$axios.post(`status-country/${id}`).then(
 						(response) => {
-							$nuxt.$emit("triggerCategory");
+							$nuxt.$emit("triggerCountry");
 							this.click = true;
 						},
 						(error) => {
@@ -207,14 +207,14 @@
 		},
 
 		created() {
-			this.getCategory();
-			this.$nuxt.$on("triggerCategory", () => {
-				this.getCategory();
+			this.getCountry();
+			this.$nuxt.$on("triggerCountry", () => {
+				this.getCountry();
 			});
 		},
 
 		beforeDestroy() {
-			this.$nuxt.$off("triggerCategory");
+			this.$nuxt.$off("triggerCountry");
 		},
 	};
 </script>

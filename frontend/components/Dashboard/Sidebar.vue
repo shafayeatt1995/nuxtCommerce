@@ -109,12 +109,35 @@
 						</ul>
 					</transition>
 				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="address || route.substring(17, 24) === 'address' ? 'dropdown-active' : ''" @click.prevent="address = !address">
+						<i>
+							<icon :icon="['fas', 'map-marker-alt']"></icon>
+						</i>
+						<span>Shipping Address
+							<i :class="address">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="address || route.substring(17, 24) === 'address'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-address-country')">Country</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-currency')">All Currency</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
 				<li>
-					<nuxt-link :to="localePath('dashboard-admin-commission')" class="nav-link">
+					<nuxt-link :to="localePath('dashboard-admin-commission')">
 						<i>
 							<icon :icon="['fas', 'percent']"></icon>
 						</i>
 						<span>Commission</span>
+
 					</nuxt-link>
 				</li>
 			</ul>
@@ -135,6 +158,7 @@
 				category: false,
 				productOptions: false,
 				currency: false,
+				address: false,
 			};
 		},
 

@@ -24,13 +24,6 @@ class SubCategoryController extends Controller
         return response()->json(compact('subCategories'));
     }
 
-    public function categoryList()
-    {
-        $this->authorize('admin');
-        $categories = Category::orderBy('name')->get();
-        return response()->json(compact('categories'));
-    }
-
     public function createSubCategory(Request $request)
     {
         $this->authorize('admin');

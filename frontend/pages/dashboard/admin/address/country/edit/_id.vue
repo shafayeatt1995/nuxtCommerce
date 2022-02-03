@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Edit Category</h1>
+			<h1>Edit Country</h1>
 		</div>
 
 		<div class="section-body">
@@ -10,7 +10,7 @@
 					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
-							<label for="name">Category Name</label>
+							<label for="name">Country Name</label>
 							<input type="text" class="form-control" id="name" v-model="form.name">
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
 						</div>
@@ -25,7 +25,7 @@
 						<button type="submit" class="btn btn-primary">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Update Category</span>
+								<span v-else>Update Country</span>
 							</transition>
 						</button>
 					</div>
@@ -36,10 +36,10 @@
 </template>
 <script>
 	export default {
-		name: "edit-category",
+		name: "edit-country",
 		head() {
 			return {
-				title: `Edit Category - ${this.appName}`,
+				title: `Edit Country - ${this.appName}`,
 			};
 		},
 
@@ -56,12 +56,12 @@
 		},
 
 		methods: {
-			// Get category
-			editCategory() {
-				this.$axios.get(`edit-category/${this.$route.params.id}`).then(
+			// Get country
+			editCountry() {
+				this.$axios.get(`edit-country/${this.$route.params.id}`).then(
 					(response) => {
-						this.form.name = response.data.category.name;
-						this.form.status = response.data.category.status;
+						this.form.name = response.data.country.name;
+						this.form.status = response.data.country.status;
 					},
 					(error) => {
 						$nuxt.$emit("error", error);
@@ -74,13 +74,15 @@
 				if (this.click) {
 					this.click = false;
 					this.$axios
-						.post(`update-category/${this.$route.params.id}`, this.form)
+						.post(`update-country/${this.$route.params.id}`, this.form)
 						.then(
 							(response) => {
 								$nuxt.$emit("success", response.data);
 								this.click = true;
 								this.$router.push(
-									this.localePath("dashboard-admin-category")
+									this.localePath(
+										"dashboard-admin-address-country"
+									)
 								);
 							},
 							(error) => {
@@ -93,7 +95,7 @@
 		},
 
 		created() {
-			this.editCategory();
+			this.editCountry();
 		},
 	};
 </script>

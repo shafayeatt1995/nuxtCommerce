@@ -29,6 +29,6 @@ class SubCategory extends Model
 
     public function commission()
     {
-        return $this->belongsTo(Commission::class);
+        return $this->hasOne(Commission::class);
     }
 }

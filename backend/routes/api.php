@@ -43,7 +43,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     //Sub Category Controller
     Route::get('sub-category', 'SubCategoryController@index');
     Route::get('sub-category-list/{id}', 'SubCategoryController@subCategoryList');
-    Route::get('category-list', 'SubCategoryController@categoryList');
     Route::get('edit-sub-category/{id}', 'SubCategoryController@editSubCategory');
     Route::post('create-sub-category', 'SubCategoryController@createSubCategory');
     Route::post('update-sub-category/{id}', 'SubCategoryController@updateSubCategory');
@@ -100,6 +99,17 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     //Commission Controller
     Route::get('commission', 'CommissionController@index');
+    Route::post('update-commission', 'CommissionController@updateCommission');
+
+    //Country Controller
+    Route::get('country', 'CountryController@index');
+    Route::get('country-list', 'CountryController@countryList');
+    Route::get('edit-country/{id}', 'CountryController@editCountry');
+    Route::post('create-country', 'CountryController@createCountry');
+    Route::post('update-country/{id}', 'CountryController@updateCountry');
+    Route::post('delete-country', 'CountryController@deleteCountry');
+    Route::post('search-country', 'CountryController@searchCountry');
+    Route::post('status-country/{id}', 'CountryController@statusCountry');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

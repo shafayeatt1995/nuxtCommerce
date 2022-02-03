@@ -18,7 +18,7 @@
 					<form class="d-flex mb-3" @submit.prevent="search">
 						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword">
 						<select class="form-control" v-model="searchOption.collum">
-							<option value="name">Search by name</option>
+							<option value="name">Search by sub-category</option>
 						</select>
 						<button type="submit" class="btn btn-primary">
 							<i>
