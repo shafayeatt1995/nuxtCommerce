@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Edit Child-Category</h1>
+			<h1>Edit City</h1>
 		</div>
 
 		<div class="section-body">
@@ -10,23 +10,23 @@
 					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
-							<label for="status">Category</label>
-							<select class="form-control" id="status" v-model="form.categoryId" @change="form.categoryId ? changeCategory() : ''">
-								<option value="">Select a category</option>
-								<option :value="category.id" v-for="category in categories" :key="category.id">{{category.name}}</option>
+							<label for="status">Country</label>
+							<select class="form-control" id="status" v-model="form.countryId" @change="form.countryId ? changeCountry() : ''">
+								<option value="">Select a Country</option>
+								<option :value="country.id" v-for="country in countries" :key="country.id">{{country.name}}</option>
 							</select>
-							<p class="invalid-feedback" v-if="errors.categoryId">{{errors.categoryId[0]}}</p>
+							<p class="invalid-feedback" v-if="errors.countryId">{{errors.countryId[0]}}</p>
 						</div>
 						<div class="form-group">
-							<label for="status">Sub Category</label>
-							<select class="form-control" id="status" v-model="form.subCategoryId" :disabled="form.categoryId && subCategories.length < 1">
-								<option value="">Select a sub category</option>
-								<option :value="sub.id" v-for="sub in subCategories" :key="sub.id">{{sub.name}}</option>
+							<label for="status">State</label>
+							<select class="form-control" id="status" v-model="form.stateId" :disabled="form.countryId && states.length < 1">
+								<option value="">Select a state</option>
+								<option :value="state.id" v-for="state in states" :key="state.id">{{state.name}}</option>
 							</select>
-							<p class="invalid-feedback" v-if="errors.subCategoryId">{{errors.subCategoryId[0]}}</p>
+							<p class="invalid-feedback" v-if="errors.stateId">{{errors.stateId[0]}}</p>
 						</div>
 						<div class="form-group">
-							<label for="name">Child-Category Name</label>
+							<label for="name">City</label>
 							<input type="text" class="form-control" id="name" v-model="form.name">
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
 						</div>
@@ -41,7 +41,7 @@
 						<button type="submit" class="btn btn-primary">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Create Child-Category</span>
+								<span v-else>Create City</span>
 							</transition>
 						</button>
 					</div>
@@ -52,23 +52,23 @@
 </template>
 <script>
 	export default {
-		name: "edit-child-category",
+		name: "edit-city",
 		head() {
 			return {
-				title: `Edit Child-Category - ${this.appName}`,
+				title: `Edit City - ${this.appName}`,
 			};
 		},
 
 		data() {
 			return {
 				form: {
-					categoryId: "",
-					subCategoryId: "",
+					countryId: "",
+					stateId: "",
 					name: "",
 					status: true,
 				},
-				categories: [],
-				subCategories: [],
+				countries: [],
+				states: [],
 				errors: {},
 				click: true,
 				loading: false,
@@ -76,33 +76,29 @@
 		},
 
 		methods: {
-			// Get category
-			editChildCategory() {
-				this.$axios
-					.get(`edit-child-category/${this.$route.params.id}`)
-					.then(
-						(response) => {
-							this.form.categoryId =
-								response.data.category.category_id;
-							this.form.subCategoryId =
-								response.data.category.sub_category_id;
-							this.form.name = response.data.category.name;
-							this.form.status = response.data.category.status;
-							this.categories = response.data.categoryList;
-							this.subCategories = response.data.subCategoryList;
-						},
-						(error) => {
-							$nuxt.$emit("error", error);
-						}
-					);
+			// Get city
+			editCity() {
+				this.$axios.get(`edit-city/${this.$route.params.id}`).then(
+					(response) => {
+						this.form.countryId = response.data.city.country_id;
+						this.form.stateId = response.data.city.state_id;
+						this.form.name = response.data.city.name;
+						this.form.status = response.data.city.status;
+						this.countries = response.data.countryList;
+						this.states = response.data.stateList;
+					},
+					(error) => {
+						$nuxt.$emit("error", error);
+					}
+				);
 			},
 
-			//Change Category
-			changeCategory() {
-				this.form.subCategoryId = "";
-				this.$axios.get(`sub-category-list/${this.form.categoryId}`).then(
+			//Change country
+			changeCountry() {
+				this.form.stateId = "";
+				this.$axios.get(`state-list/${this.form.countryId}`).then(
 					(response) => {
-						this.subCategories = response.data.subCategories;
+						this.states = response.data.states;
 					},
 					(error) => {
 						$nuxt.$emit("error", error);
@@ -115,18 +111,13 @@
 				if (this.click) {
 					this.click = false;
 					this.$axios
-						.post(
-							`update-child-category/${this.$route.params.id}`,
-							this.form
-						)
+						.post(`update-city/${this.$route.params.id}`, this.form)
 						.then(
 							(response) => {
 								$nuxt.$emit("success", response.data);
 								this.click = true;
 								this.$router.push(
-									this.localePath(
-										"dashboard-admin-category-child"
-									)
+									this.localePath("dashboard-admin-address-city")
 								);
 							},
 							(error) => {
@@ -139,7 +130,7 @@
 		},
 
 		created() {
-			this.editChildCategory();
+			this.editCity();
 		},
 	};
 </script>

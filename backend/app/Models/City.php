@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class State extends Model
+class City extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['country_id', 'name', 'status'];
+    protected $fillable = ['country_id', 'state_id', 'name', 'status'];
     protected $casts = ['status' => 'boolean'];
 
     public function country()
@@ -17,8 +16,8 @@ class State extends Model
         return $this->belongsTo(Country::class);
     }
 
-    public function cities()
+    public function state()
     {
-        return $this->hasMany(City::class);
+        return $this->belongsTo(State::class);
     }
 }

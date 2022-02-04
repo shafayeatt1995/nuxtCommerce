@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Create Sub-Category</h1>
+			<h1>Create City</h1>
 		</div>
 
 		<div class="section-body">
@@ -10,23 +10,23 @@
 					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
 						<div class="form-group">
-							<label for="status">Category</label>
-							<select class="form-control" id="status" v-model="form.categoryId" @change="form.categoryId ? changeCategory() : ''">
-								<option value="">Select a category</option>
-								<option :value="category.id" v-for="category in categories" :key="category.id">{{category.name}}</option>
+							<label for="status">Country</label>
+							<select class="form-control" id="status" v-model="form.countryId" @change="form.countryId ? changeCountry() : ''">
+								<option value="">Select a Country</option>
+								<option :value="country.id" v-for="country in countries" :key="country.id">{{country.name}}</option>
 							</select>
-							<p class="invalid-feedback" v-if="errors.categoryId">{{errors.categoryId[0]}}</p>
+							<p class="invalid-feedback" v-if="errors.countryId">{{errors.countryId[0]}}</p>
 						</div>
 						<div class="form-group">
-							<label for="status">Sub Category</label>
-							<select class="form-control" id="status" v-model="form.subCategoryId" :disabled="form.categoryId && subCategories.length < 1">
-								<option value="">Select a sub category</option>
-								<option :value="sub.id" v-for="sub in subCategories" :key="sub.id">{{sub.name}}</option>
+							<label for="status">State</label>
+							<select class="form-control" id="status" v-model="form.stateId" :disabled="form.countryId && states.length < 1">
+								<option value="">Select a state</option>
+								<option :value="state.id" v-for="state in states" :key="state.id">{{state.name}}</option>
 							</select>
-							<p class="invalid-feedback" v-if="errors.subCategoryId">{{errors.subCategoryId[0]}}</p>
+							<p class="invalid-feedback" v-if="errors.stateId">{{errors.stateId[0]}}</p>
 						</div>
 						<div class="form-group">
-							<label for="name">Child-Category Name</label>
+							<label for="name">City</label>
 							<input type="text" class="form-control" id="name" v-model="form.name">
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
 						</div>
@@ -41,7 +41,7 @@
 						<button type="submit" class="btn btn-primary">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Create Child-Category</span>
+								<span v-else>Create City</span>
 							</transition>
 						</button>
 					</div>
@@ -52,23 +52,23 @@
 </template>
 <script>
 	export default {
-		name: "create-sub-category",
+		name: "create-city",
 		head() {
 			return {
-				title: `Create Sub Category - ${this.appName}`,
+				title: `Create city - ${this.appName}`,
 			};
 		},
 
 		data() {
 			return {
 				form: {
-					categoryId: "",
-					subCategoryId: "",
+					countryId: "",
+					stateId: "",
 					name: "",
 					status: true,
 				},
-				categories: [],
-				subCategories: [],
+				countries: [],
+				states: [],
 				errors: {},
 				click: true,
 				loading: false,
@@ -76,10 +76,10 @@
 		},
 
 		methods: {
-			getCategoryList() {
-				this.$axios.get("category-list").then(
+			getCountryList() {
+				this.$axios.get("country-list").then(
 					(response) => {
-						this.categories = response.data.categories;
+						this.countries = response.data.countries;
 					},
 					(error) => {
 						$nuxt.$emit("error", error);
@@ -87,12 +87,12 @@
 				);
 			},
 
-			//Change Category
-			changeCategory() {
-				this.form.subCategoryId = "";
-				this.$axios.get(`sub-category-list/${this.form.categoryId}`).then(
+			//Change country
+			changeCountry() {
+				this.form.stateId = "";
+				this.$axios.get(`state-list/${this.form.countryId}`).then(
 					(response) => {
-						this.subCategories = response.data.subCategories;
+						this.states = response.data.states;
 					},
 					(error) => {
 						$nuxt.$emit("error", error);
@@ -105,7 +105,7 @@
 				if (this.click) {
 					this.click = false;
 					this.errors = {};
-					this.$axios.post("create-child-category", this.form).then(
+					this.$axios.post("create-city", this.form).then(
 						(response) => {
 							$nuxt.$emit("success", response.data);
 							this.click = true;
@@ -120,7 +120,7 @@
 		},
 
 		created() {
-			this.getCategoryList();
+			this.getCountryList();
 		},
 	};
 </script>

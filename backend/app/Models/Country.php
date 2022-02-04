@@ -17,13 +17,8 @@ class Country extends Model
         return $this->hasMany(State::class);
     }
 
-    // public function childCategories()
-    // {
-    //     return $this->hasMany(ChildCategory::class);
-    // }
-
-    // public function sizes()
-    // {
-    //     return $this->hasMany(Size::class);
-    // }
+    public function cities()
+    {
+        return $this->hasMany(City::class);
+    }
 }

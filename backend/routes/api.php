@@ -120,6 +120,16 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('delete-state', 'StateController@deleteState');
     Route::post('search-state', 'StateController@searchState');
     Route::post('status-state/{id}', 'StateController@statusState');
+
+    //City Controller
+    Route::get('city', 'CityController@index');
+    Route::get('city-list/{id}', 'CityController@cityList');
+    Route::get('edit-city/{id}', 'CityController@editCity');
+    Route::post('create-city', 'CityController@createCity');
+    Route::post('update-city/{id}', 'CityController@updateCity');
+    Route::post('delete-city', 'CityController@deleteCity');
+    Route::post('search-city', 'CityController@searchCity');
+    Route::post('status-city/{id}', 'CityController@statusCity');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
