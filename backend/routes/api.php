@@ -130,6 +130,14 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('delete-city', 'CityController@deleteCity');
     Route::post('search-city', 'CityController@searchCity');
     Route::post('status-city/{id}', 'CityController@statusCity');
+
+    //Shipping Cost Controller
+    Route::get('shipping-cost', 'ShippingCostController@index');
+    Route::get('edit-shipping-cost/{id}', 'ShippingCostController@editShippingCost');
+    Route::post('create-shipping-cost', 'ShippingCostController@createShippingCost');
+    Route::post('update-shipping-cost/{id}', 'ShippingCostController@updateShippingCost');
+    Route::post('delete-shipping-cost', 'ShippingCostController@deleteShippingCost');
+    Route::post('search-shipping-cost', 'ShippingCostController@searchShippingCost');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

@@ -1,15 +1,14 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Currency</h1>
-			<nuxt-link :to="localePath('dashboard-admin-currency-create')" class="btn btn-primary">Create Currency</nuxt-link>
+			<h1>Shipping Cost</h1>
+			<nuxt-link :to="localePath('dashboard-admin-shipping-cost-create')" class="btn btn-primary">Create Shipping Cost</nuxt-link>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
-				<h4 class="w-100 text-center mb-3">Always keep the default currency exchange rate 1</h4>
 				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
-					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCurrency() : ''">
+					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCost() : ''">
 						<select class="form-control" v-model="action">
 							<option value="">Select a option</option>
 							<option value="delete">Delete selected items</option>
@@ -29,16 +28,15 @@
 						</button>
 					</form>
 				</div>
-				<table class="table table-striped text-center table-responsive-md">
+				<table class="table text-center table-striped table-responsive-md">
 					<thead>
 						<tr>
 							<th scope="col">
 								<input class="form-check-input" type="checkbox" @click="select.length >= 1 ? deselectall():selectAll()" :checked="select.length >= 1">
 							</th>
-							<th scope="col">Currency</th>
-							<th scope="col">Exchange Rate</th>
-							<th scope="col">status</th>
-							<th scope="col">Default</th>
+							<th scope="col">Name</th>
+							<th scope="col">Shipping Cost Rules</th>
+							<th scope="col">Last Update</th>
 							<th scope="col">Action</th>
 						</tr>
 					</thead>
@@ -47,28 +45,34 @@
 							<Loader />
 						</td>
 					</tbody>
-					<tbody class="text-center" v-else-if="currencies.data && currencies.data.length >= 1">
-						<tr v-for="currency in currencies.data" :key="currency.id">
-							<th scope="row">
-								<input class="form-check-input" type="checkbox" v-model="select" :value="currency.id">
-							</th>
-							<td>{{currency.country}} ({{currency.name}})</td>
-							<td>{{currency.symble}} {{currency.rate | currency}}</td>
-							<td>
-								<button class="badge badge-success color-black" type="button" @click="changeStatus(currency.id)" v-if="currency.status">Active</button>
-								<button class="badge badge-danger" type="button" @click="changeStatus(currency.id)" v-else>Deactive</button>
+					<tbody class="text-center" v-else-if="costs.data && costs.data.length >= 1">
+						<tr v-for="cost in costs.data" :key="cost.id">
+							<td scope="row">
+								<input class="form-check-input" type="checkbox" v-model="select" :value="cost.id">
 							</td>
-							<td>
-								<button class="badge badge-success color-black" type="button" v-if="currency.default">Default</button>
-								<button class="badge badge-danger" type="button" @click="changeDefault(currency.id)" v-else>Make Default</button>
+							<td>{{cost.name}}</td>
+							<td class="py-3">
+								<table>
+									<tbody>
+										<tr v-for="(rule, key) in JSON.parse(cost.rules)" :key="key + 100">
+											<td>{{key + 1}})</td>
+											<td>{{rule.fromWeight}} KG</td>
+											<td>to</td>
+											<td>{{rule.toWeight}} KG</td>
+											<td>=</td>
+											<td>$ {{rule.price}}</td>
+										</tr>
+									</tbody>
+								</table>
 							</td>
+							<td>{{cost.updated_at | date}}</td>
 							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-currency-edit-id', params:{id: currency.id}})" class="btn btn-icon btn-primary mx-2 my-2">
+								<nuxt-link :to="localePath({name: 'dashboard-admin-shipping-cost-edit-id', params:{id: cost.id}})" class="btn btn-icon btn-primary mx-2 my-2">
 									<i>
 										<icon :icon="['fas', 'edit']"></icon>
 									</i>
 								</nuxt-link>
-								<button class="btn btn-icon btn-danger my-2" @click="deleteCurrency(currency.id)">
+								<button class="btn btn-icon btn-danger my-2" @click="deleteCost(cost.id)">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -82,23 +86,23 @@
 						</td>
 					</tbody>
 				</table>
-				<pagination :data="currencies" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
+				<pagination :data="costs" @pagination-change-page="getResults" class="justify-content-center mt-3 paginate"></pagination>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
 	export default {
-		name: "all-currencies",
+		name: "all-shipping-cost",
 		head() {
 			return {
-				title: `Currencies - ${this.appName}`,
+				title: `Shipping Cost - ${this.appName}`,
 			};
 		},
 		data() {
 			return {
 				click: true,
-				currencies: {},
+				costs: {},
 				select: [],
 				action: "",
 				searchOption: {
@@ -109,11 +113,11 @@
 			};
 		},
 		methods: {
-			//Get Currency
-			getCurrency() {
-				this.$axios.get("currency").then(
+			//Get shipping cost
+			getCost() {
+				this.$axios.get("shipping-cost").then(
 					(response) => {
-						this.currencies = response.data.currencies;
+						this.costs = response.data.costs;
 						this.loading = false;
 					},
 					(error) => {
@@ -122,13 +126,13 @@
 				);
 			},
 			getResults(page = 1) {
-				this.$axios.get("currency?page=" + page).then((response) => {
-					this.currencies = response.data.currencies;
+				this.$axios.get("shipping-cost?page=" + page).then((response) => {
+					this.costs = response.data.costs;
 				});
 			},
 
 			//Confirm Delete
-			deleteCurrency(id) {
+			deleteCost(id) {
 				if (this.click) {
 					this.click = false;
 					this.$swal
@@ -145,11 +149,11 @@
 							if (result.isConfirmed) {
 								let list = id ? [id] : this.select;
 								this.$axios
-									.post("delete-currency", { idList: list })
+									.post("delete-shipping-cost", { idList: list })
 									.then(
 										(response) => {
 											this.select = [];
-											$nuxt.$emit("triggerCurrency");
+											$nuxt.$emit("triggerCost");
 											$nuxt.$emit("success", response.data);
 											this.click = true;
 										},
@@ -168,8 +172,8 @@
 			// Select All Data
 			selectAll() {
 				this.select = [];
-				this.currencies.data.forEach((currency) => {
-					this.select.push(currency.id);
+				this.costs.data.forEach((cost) => {
+					this.select.push(cost.id);
 				});
 			},
 
@@ -182,42 +186,28 @@
 				if (this.click) {
 					this.click = false;
 					this.loading = true;
-					this.$axios.post("search-currency", this.searchOption).then(
-						(response) => {
-							this.currencies = response.data.currencies;
-							this.loading = false;
-							this.click = true;
-						},
-						(error) => {
-							$nuxt.$emit("error", error);
-							this.click = true;
-						}
-					);
+					this.$axios
+						.post("search-shipping-cost", this.searchOption)
+						.then(
+							(response) => {
+								this.costs = response.data.costs;
+								this.loading = false;
+								this.click = true;
+							},
+							(error) => {
+								$nuxt.$emit("error", error);
+								this.click = true;
+							}
+						);
 				}
 			},
 
 			changeStatus(id) {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post(`status-currency/${id}`).then(
+					this.$axios.post(`status-shipping-cost/${id}`).then(
 						(response) => {
-							$nuxt.$emit("triggerCurrency");
-							this.click = true;
-						},
-						(error) => {
-							$nuxt.$emit("error", error);
-							this.click = true;
-						}
-					);
-				}
-			},
-
-			changeDefault(id) {
-				if (this.click) {
-					this.click = false;
-					this.$axios.post(`default-currency/${id}`).then(
-						(response) => {
-							$nuxt.$emit("triggerCurrency");
+							$nuxt.$emit("triggerCost");
 							this.click = true;
 						},
 						(error) => {
@@ -230,14 +220,14 @@
 		},
 
 		created() {
-			this.getCurrency();
-			this.$nuxt.$on("triggerCurrency", () => {
-				this.getCurrency();
+			this.getCost();
+			this.$nuxt.$on("triggerCost", () => {
+				this.getCost();
 			});
 		},
 
 		beforeDestroy() {
-			this.$nuxt.$off("triggerCurrency");
+			this.$nuxt.$off("triggerCost");
 		},
 	};
 </script>

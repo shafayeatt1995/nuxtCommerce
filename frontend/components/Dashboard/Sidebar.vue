@@ -134,6 +134,28 @@
 						</ul>
 					</transition>
 				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="cost || route.substring(17, 30) === 'shipping-cost' ? 'dropdown-active' : ''" @click.prevent="cost = !cost">
+						<i>
+							<icon :icon="['fas', 'money-check-alt']"></icon>
+						</i>
+						<span>Shipping Cost
+							<i :class="cost">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="cost || route.substring(17, 30) === 'shipping-cost'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-shipping-cost-create')">Create Shipping Cost</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-shipping-cost')">Shipping Cost</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
 				<li>
 					<nuxt-link :to="localePath('dashboard-admin-commission')">
 						<i>
@@ -162,6 +184,7 @@
 				productOptions: false,
 				currency: false,
 				address: false,
+				cost: false,
 			};
 		},
 
