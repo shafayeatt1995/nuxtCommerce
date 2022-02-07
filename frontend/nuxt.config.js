@@ -14,11 +14,6 @@ export default {
 
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: `${process.env.URL}images/icon.ico` },
-
-			// { rel: 'stylesheet', href: `${process.env.URL}frontend/css/bootstrap.min.css` },
-			// { rel: 'stylesheet', href: `${process.env.URL}css/slicknav.min.css` },
-			// { rel: 'stylesheet', href: `${process.env.URL}css/style.css` },
-			// { rel: 'stylesheet', href: `${process.env.URL}css/responsive.css` },
 		],
 	},
 

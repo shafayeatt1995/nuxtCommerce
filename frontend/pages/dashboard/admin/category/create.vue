@@ -37,6 +37,7 @@
 <script>
 	export default {
 		name: "create-category",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Category - ${this.appName}`,

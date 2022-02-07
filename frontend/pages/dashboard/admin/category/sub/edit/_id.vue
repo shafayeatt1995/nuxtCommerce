@@ -45,6 +45,7 @@
 <script>
 	export default {
 		name: "edit-sub-category",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Edit Sub-Category - ${this.appName}`,

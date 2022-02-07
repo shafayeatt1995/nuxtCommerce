@@ -16,6 +16,13 @@ class StateController extends Controller
         return response()->json(compact('states'));
     }
 
+    public function stateRules()
+    {
+        $this->authorize('admin');
+        $states = State::with('shpippingCostRule.shippingCost')->latest()->paginate(20);
+        return response()->json(compact('states'));
+    }
+
     public function stateList($id)
     {
         $this->authorize('admin');

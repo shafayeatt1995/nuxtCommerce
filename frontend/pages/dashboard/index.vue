@@ -15,6 +15,7 @@
 </template>
 <script>
 	export default {
+		name: "user-dashboard",
 		auth: true,
 		head() {
 			return {

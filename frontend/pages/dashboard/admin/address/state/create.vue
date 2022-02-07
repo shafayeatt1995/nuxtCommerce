@@ -46,6 +46,7 @@
 <script>
 	export default {
 		name: "create-state",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create State - ${this.appName}`,

@@ -45,6 +45,7 @@
 <script>
 	export default {
 		name: "edit-state",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Edit State - ${this.appName}`,

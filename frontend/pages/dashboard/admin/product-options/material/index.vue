@@ -83,6 +83,7 @@
 <script>
 	export default {
 		name: "all-materials",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Material - ${this.appName}`,

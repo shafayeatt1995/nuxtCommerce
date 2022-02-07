@@ -53,6 +53,7 @@
 <script>
 	export default {
 		name: "edit-child-category",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Edit Child-Category - ${this.appName}`,

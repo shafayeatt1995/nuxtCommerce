@@ -40,6 +40,7 @@
 <script>
 	export default {
 		name: "edit-brand",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Edit Brand - ${this.appName}`,

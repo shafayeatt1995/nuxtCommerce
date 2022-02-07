@@ -81,6 +81,7 @@
 <script>
 	export default {
 		name: "create-rule",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Shipping Cost Rules - ${this.appName}`,

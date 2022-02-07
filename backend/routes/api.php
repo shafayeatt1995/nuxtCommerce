@@ -114,6 +114,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     //State Controller
     Route::get('state', 'StateController@index');
     Route::get('state-list/{id}', 'StateController@stateList');
+    Route::get('state-rules', 'StateController@stateRules');
     Route::get('edit-state/{id}', 'StateController@editState');
     Route::post('create-state', 'StateController@createState');
     Route::post('update-state/{id}', 'StateController@updateState');
@@ -133,11 +134,13 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     //Shipping Cost Controller
     Route::get('shipping-cost', 'ShippingCostController@index');
+    Route::get('shipping-cost-list', 'ShippingCostController@shippingCostList');
     Route::get('edit-shipping-cost/{id}', 'ShippingCostController@editShippingCost');
     Route::post('create-shipping-cost', 'ShippingCostController@createShippingCost');
     Route::post('update-shipping-cost/{id}', 'ShippingCostController@updateShippingCost');
     Route::post('delete-shipping-cost', 'ShippingCostController@deleteShippingCost');
     Route::post('search-shipping-cost', 'ShippingCostController@searchShippingCost');
+    Route::post('update-shipping-cost-rules', 'ShippingCostController@updateShippingCostRules');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

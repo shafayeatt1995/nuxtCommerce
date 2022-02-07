@@ -53,6 +53,7 @@
 <script>
 	export default {
 		name: "create-size",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Size - ${this.appName}`,

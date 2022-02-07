@@ -37,6 +37,7 @@
 <script>
 	export default {
 		name: "create-material",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Material - ${this.appName}`,

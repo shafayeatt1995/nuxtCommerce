@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShippingCost;
+use App\Models\ShippingCostRule;
 use Illuminate\Http\Request;
 
 class ShippingCostController extends Controller
@@ -12,6 +13,13 @@ class ShippingCostController extends Controller
     {
         $this->authorize("admin");
         $costs = ShippingCost::latest()->paginate(20);
+        return response()->json(compact("costs"));
+    }
+
+    public function shippingCostList()
+    {
+        $this->authorize("admin");
+        $costs = ShippingCost::orderBy("name")->get();
         return response()->json(compact("costs"));
     }
 
@@ -26,7 +34,7 @@ class ShippingCostController extends Controller
         $cost->name = $request->name;
         $cost->rules = json_encode($request->rules);
         $cost->save();
-        return response()->json('Shipping cost rules successfully created');
+        return response()->json("Shipping cost rules successfully created");
     }
 
     public function editShippingCost($id)
@@ -47,38 +55,56 @@ class ShippingCostController extends Controller
         $cost->name = $request->name;
         $cost->rules = json_encode($request->rules);
         $cost->save();
-        return response()->json('Shipping cost rules successfully updated');
+        return response()->json("Shipping cost rules successfully updated");
     }
 
     public function deleteShippingCost(Request $request)
     {
-        $this->authorize('admin');
+        $this->authorize("admin");
         $request->validate(
             [
                 "idList" => "required|array|min:1"
             ],
             [
-                'idList.required' => 'Please select an item',
+                "idList.required" => "Please select an item",
             ]
         );
         foreach ($request->idList as $id) {
-            $cost = ShippingCost::where('id', $id)->first();
+            $cost = ShippingCost::where("id", $id)->first();
             if (isset($cost)) {
                 $cost->delete();
             } else {
-                return response()->json(['message' => 'Shipping cost not found'], 422);
+                return response()->json(["message" => "Shipping cost not found"], 422);
             }
         }
-        return response()->json('Shipping cost successfully deleted');
+        return response()->json("Shipping cost successfully deleted");
     }
 
     public function searchShippingCost(Request $request)
     {
-        $this->authorize('admin');
+        $this->authorize("admin");
         $request->validate([
             "collum" => "required"
         ]);
-        $costs = ShippingCost::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(20);
-        return response()->json(compact('costs'));
+        $costs = ShippingCost::where($request->collum, "LIKE", "%" . $request->keyword . "%")->latest()->paginate(20);
+        return response()->json(compact("costs"));
+    }
+
+    public function updateShippingCostRules(Request $request)
+    {
+        $this->authorize("admin");
+        $request->validate([
+            "stateId" => "required|numeric",
+            "rulesId" => "required|numeric",
+        ], [
+            "rulesId.required" => "Please select a rules",
+        ]);
+
+        $exist = ShippingCostRule::where("state_id", $request->stateId)->first();
+        $cost = $exist ? $exist : new ShippingCostRule();
+        $cost->state_id = $request->stateId;
+        $cost->shipping_cost_id = $request->rulesId;
+        $cost->save();
+        return response()->json("Shipping cost rules update successfully");
     }
 }

@@ -37,6 +37,7 @@
 <script>
 	export default {
 		name: "create-country",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Country - ${this.appName}`,

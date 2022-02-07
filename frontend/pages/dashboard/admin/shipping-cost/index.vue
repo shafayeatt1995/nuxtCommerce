@@ -19,7 +19,7 @@
 						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword">
 						<select class="form-control" v-model="searchOption.collum">
 							<option value="name">Search by name</option>
-							<option value="country">Search by country</option>
+							<option value="country">Search by name</option>
 						</select>
 						<button type="submit" class="btn btn-primary">
 							<i>
@@ -94,6 +94,7 @@
 <script>
 	export default {
 		name: "all-shipping-cost",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Shipping Cost - ${this.appName}`,

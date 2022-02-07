@@ -80,6 +80,7 @@
 <script>
 	export default {
 		name: "all-brands",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Brands - ${this.appName}`,

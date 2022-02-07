@@ -85,6 +85,7 @@
 <script>
 	export default {
 		name: "all-colors",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Color - ${this.appName}`,

@@ -45,6 +45,7 @@
 <script>
 	export default {
 		name: "create-brand",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Brand - ${this.appName}`,

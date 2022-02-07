@@ -83,6 +83,7 @@
 <script>
 	export default {
 		name: "all-countries",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Countries - ${this.appName}`,

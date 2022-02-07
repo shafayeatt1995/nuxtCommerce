@@ -85,6 +85,7 @@
 <script>
 	export default {
 		name: "all-sub-categories",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Sub Categories - ${this.appName}`,

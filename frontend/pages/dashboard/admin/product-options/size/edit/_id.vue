@@ -53,6 +53,7 @@
 <script>
 	export default {
 		name: "edit-size",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Edit Size - ${this.appName}`,

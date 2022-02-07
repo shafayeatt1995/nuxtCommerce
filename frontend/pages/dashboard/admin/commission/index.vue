@@ -105,6 +105,7 @@
 <script>
 	export default {
 		name: "all-commissions",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Commission - ${this.appName}`,

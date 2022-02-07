@@ -6,7 +6,7 @@
 					<img :src="`${url}images/logo.png`" alt="logo" class="img-fluid px-5">
 				</nuxt-link>
 			</div>
-			<ul class="sidebar-menu">
+			<ul class="sidebar-menu" v-if="admin">
 				<li>
 					<nuxt-link :to="localePath('dashboard')" class="nav-link">
 						<i>
@@ -153,6 +153,9 @@
 							<li>
 								<nuxt-link :to="localePath('dashboard-admin-shipping-cost')">Shipping Cost</nuxt-link>
 							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-shipping-cost-set')">Manage Rules</nuxt-link>
+							</li>
 						</ul>
 					</transition>
 				</li>
@@ -164,6 +167,38 @@
 						<span>Commission</span>
 
 					</nuxt-link>
+				</li>
+			</ul>
+			<ul class="sidebar-menu" v-if="seller">
+				<li>
+					<nuxt-link :to="localePath('dashboard')" class="nav-link">
+						<i>
+							<icon :icon="['fas', 'tachometer-alt']"></icon>
+						</i>
+						<span>Dashboard</span>
+					</nuxt-link>
+				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="brand || route.substring(17, 22) === 'brand' ? 'dropdown-active' : ''" @click.prevent="brand = !brand">
+						<i>
+							<icon :icon="['fas', 'tags']"></icon>
+						</i>
+						<span>Brand
+							<i :class="brand">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="brand || route.substring(17, 22) === 'brand'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-brand')">All Brand</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-brand-create')">Create Brand</nuxt-link>
+							</li>
+						</ul>
+					</transition>
 				</li>
 			</ul>
 		</aside>

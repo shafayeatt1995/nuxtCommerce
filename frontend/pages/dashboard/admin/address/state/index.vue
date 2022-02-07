@@ -85,6 +85,7 @@
 <script>
 	export default {
 		name: "all-state",
+		middleware: "admin",
 		head() {
 			return {
 				title: `State - ${this.appName}`,

@@ -90,6 +90,7 @@
 <script>
 	export default {
 		name: "all-sizes",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Size - ${this.appName}`,

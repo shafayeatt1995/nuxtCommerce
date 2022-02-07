@@ -43,6 +43,7 @@
 <script>
 	export default {
 		name: "create-color",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Color - ${this.appName}`,

@@ -53,6 +53,7 @@
 <script>
 	export default {
 		name: "create-city",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create city - ${this.appName}`,

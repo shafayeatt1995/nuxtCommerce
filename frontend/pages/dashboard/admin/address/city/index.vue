@@ -87,6 +87,7 @@
 <script>
 	export default {
 		name: "all-city",
+		middleware: "admin",
 		head() {
 			return {
 				title: `City - ${this.appName}`,

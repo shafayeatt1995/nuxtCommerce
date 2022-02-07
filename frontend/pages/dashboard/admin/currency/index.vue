@@ -90,6 +90,7 @@
 <script>
 	export default {
 		name: "all-currencies",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Currencies - ${this.appName}`,

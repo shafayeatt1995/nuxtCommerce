@@ -21,4 +21,9 @@ class State extends Model
     {
         return $this->hasMany(City::class);
     }
+
+    public function shpippingCostRule()
+    {
+        return $this->hasOne(ShippingCostRule::class);
+    }
 }

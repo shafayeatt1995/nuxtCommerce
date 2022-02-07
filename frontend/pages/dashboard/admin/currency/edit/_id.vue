@@ -52,6 +52,7 @@
 <script>
 	export default {
 		name: "edit-currency",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Edit Currency - ${this.appName}`,

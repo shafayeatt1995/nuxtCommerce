@@ -53,6 +53,7 @@
 <script>
 	export default {
 		name: "create-sub-category",
+		middleware: "admin",
 		head() {
 			return {
 				title: `Create Sub Category - ${this.appName}`,
