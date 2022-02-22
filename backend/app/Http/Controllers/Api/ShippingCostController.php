@@ -86,7 +86,7 @@ class ShippingCostController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $costs = ShippingCost::where($request->collum, "LIKE", "%" . $request->keyword . "%")->latest()->paginate(20);
+        $costs = ShippingCost::where($request->collum, "LIKE", "%" . $request->keyword . "%")->latest()->paginate(500);
         return response()->json(compact("costs"));
     }
 

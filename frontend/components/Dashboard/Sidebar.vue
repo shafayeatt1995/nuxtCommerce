@@ -1,5 +1,5 @@
 <template>
-	<div class="main-sidebar sidebar-style-2" :class="active ? 'active':''">
+	<div class="main-sidebar" :class="active ? 'active':''" :style="dashboardModal ? 'z-index: 0 !important':''">
 		<aside id="sidebar-wrapper">
 			<div class="sidebar-brand">
 				<nuxt-link :to="localePath('index')" target="_blank">
@@ -14,6 +14,28 @@
 						</i>
 						<span>Dashboard</span>
 					</nuxt-link>
+				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="store || route.substring(17, 22) === 'store' ? 'dropdown-active' : ''" @click.prevent="store = !store">
+						<i>
+							<icon :icon="['fas', 'store']"></icon>
+						</i>
+						<span>Store
+							<i :class="store">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="store || route.substring(17, 22) === 'store'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-store')">All Store</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-store-pending')">New Store Request</nuxt-link>
+							</li>
+						</ul>
+					</transition>
 				</li>
 				<li class="sidebar-dropdown">
 					<a href="#" class="has-dropdown" :class="brand || route.substring(17, 22) === 'brand' ? 'dropdown-active' : ''" @click.prevent="brand = !brand">
@@ -179,23 +201,23 @@
 					</nuxt-link>
 				</li>
 				<li class="sidebar-dropdown">
-					<a href="#" class="has-dropdown" :class="brand || route.substring(17, 22) === 'brand' ? 'dropdown-active' : ''" @click.prevent="brand = !brand">
+					<a href="#" class="has-dropdown" :class="product || route.substring(17, 24) === 'product' ? 'dropdown-active' : ''" @click.prevent="product = !product">
 						<i>
-							<icon :icon="['fas', 'tags']"></icon>
+							<icon :icon="['fas', 'boxes']"></icon>
 						</i>
-						<span>Brand
-							<i :class="brand">
+						<span>Products
+							<i :class="product">
 								<icon :icon="['fas', 'chevron-right']"></icon>
 							</i>
 						</span>
 					</a>
 					<transition name="slide" mode="out-in">
-						<ul class="sidebar-dropdown-menu" v-if="brand || route.substring(17, 22) === 'brand'">
+						<ul class="sidebar-dropdown-menu" v-if="product || route.substring(17, 24) === 'product'">
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-brand')">All Brand</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-seller-product')">All Product</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-brand-create')">Create Brand</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-seller-product-create')">Create Product</nuxt-link>
 							</li>
 						</ul>
 					</transition>
@@ -213,13 +235,14 @@
 		data() {
 			return {
 				route: "",
-				plan: false,
+				store: false,
 				brand: false,
 				category: false,
 				productOptions: false,
 				currency: false,
 				address: false,
 				cost: false,
+				product: false,
 			};
 		},
 

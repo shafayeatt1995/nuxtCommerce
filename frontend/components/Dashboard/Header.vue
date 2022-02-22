@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<div class="navbar-bg"></div>
-		<nav class="navbar navbar-expand-lg main-navbar" :class="sidebar ? 'active':''">
+		<nav class="navbar navbar-expand-lg main-navbar" :class="sidebar ? 'active':''" :style="dashboardModal ? 'z-index: 0 !important':''">
 			<form class="form-inline mr-auto">
 				<ul class="navbar-nav mr-3">
 					<li>
-						<a href="" class="nav-link nav-link-lg" @click.prevent="toggleSidebar">
+						<a href="#" class="nav-link nav-link-lg" @click.prevent="toggleSidebar">
 							<icon :icon="['fas', 'bars']"></icon>
 						</a>
 					</li>

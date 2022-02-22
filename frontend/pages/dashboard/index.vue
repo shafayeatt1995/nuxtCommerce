@@ -8,6 +8,7 @@
 			<div class="row">
 				<div class="col-lg-6 offset-lg-3 bg-white shadow">
 					<h1>This is section body</h1>
+					{{customer}}
 				</div>
 			</div>
 		</div>
@@ -17,10 +18,13 @@
 	export default {
 		name: "user-dashboard",
 		auth: true,
+		middleware: "not-customer",
 		head() {
 			return {
 				title: `Dashboard - ${this.appName}`,
 			};
 		},
+
+		created() {},
 	};
 </script>

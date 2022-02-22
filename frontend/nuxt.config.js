@@ -106,7 +106,24 @@ export default {
 				},
 				token: {
 					property: 'access_token',
-					maxAge: 60 * 60 * 24,
+					maxAge: 60 * 60 * 12,
+				},
+				refreshToken: {
+					maxAge: 20160 * 60,
+				},
+			},
+			dashboard: {
+				provider: 'laravel/jwt',
+				url: '/',
+				endpoints: {
+					login: { url: 'dashboard-login', method: 'post' },
+					logout: { url: 'logout', method: 'post' },
+					refresh: { url: 'refresh', method: 'post' },
+					user: { url: 'user', method: 'post' },
+				},
+				token: {
+					property: 'access_token',
+					maxAge: 60 * 60 * 12,
 				},
 				refreshToken: {
 					maxAge: 20160 * 60,

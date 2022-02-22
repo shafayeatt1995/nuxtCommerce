@@ -99,7 +99,7 @@ class SubCategoryController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $categories = SubCategory::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category')->latest()->paginate(20);
+        $categories = SubCategory::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category')->latest()->paginate(500);
         return response()->json(compact('categories'));
     }
 

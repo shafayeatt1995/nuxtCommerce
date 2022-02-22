@@ -182,6 +182,14 @@ button {
 	max-height: 250px;
 }
 
+.max-w250 {
+	max-width: 250px;
+}
+
+.max-w150 {
+	max-width: 150px;
+}
+
 .text-muted {
 	color: #98a6ad !important;
 }
@@ -1805,8 +1813,8 @@ h6 .badge {
 
 .btn-warning, .btn-warning.disabled {
 	box-shadow: 0 2px 6px #ffc473;
-	background-color: #6777ef;
-	border-color: #6777ef;
+	background-color: #ffa426;
+	border-color: #ffa426;
 	color: #fff;
 }
 
@@ -1816,7 +1824,7 @@ h6 .badge {
 }
 
 .btn-outline-warning:hover, .btn-outline-warning:focus, .btn-outline-warning:active, .btn-outline-warning.disabled:hover, .btn-outline-warning.disabled:focus, .btn-outline-warning.disabled:active {
-	background-color: #6777ef !important;
+	background-color: #ff990d !important;
 	color: #fff !important;
 }
 
@@ -3215,7 +3223,6 @@ pre {
 	}
 }
 
-/* 4.4 Layout */
 .main-sidebar {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
 	position: fixed;
@@ -3902,6 +3909,10 @@ body.layout-3 .main-footer {
 	height: 15px;
 	width: 100%;
 	display: block;
+}
+
+.grid-gap-5 {
+	grid-gap: 5px;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -103,7 +103,7 @@ class ColorController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $colors = Color::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(20);
+        $colors = Color::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('colors'));
     }
 

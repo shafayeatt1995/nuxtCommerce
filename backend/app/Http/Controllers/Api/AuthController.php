@@ -17,7 +17,7 @@ class AuthController extends Controller
 
 	public function __construct()
 	{
-		$this->middleware('auth:api', ['except' => ['login', 'register', 'dashboardLogin']]);
+		$this->middleware('auth:api', ['except' => ['login', 'dashboardLogin', 'register', 'dashboardLogin']]);
 	}
 
 	public function login(Request $request)
@@ -26,6 +26,21 @@ class AuthController extends Controller
 
 		if ($token = auth('api')->attempt($credentials)) {
 			return $this->respondWithToken($token);
+		}
+		return response()->json(['error' => 'Unauthorized'], 401);
+	}
+
+	public function dashboardLogin(Request $request)
+	{
+		$credentials = $request->only('email', 'password');
+
+		if ($token = auth('api')->attempt($credentials)) {
+			$role = User::where("email", $request->email)->first()->role_id;
+			if ($role === 3) {
+				return response()->json(['error' => 'Unauthorized'], 401);
+			} else {
+				return $this->respondWithToken($token);
+			}
 		}
 		return response()->json(['error' => 'Unauthorized'], 401);
 	}

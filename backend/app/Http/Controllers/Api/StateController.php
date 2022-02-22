@@ -105,7 +105,7 @@ class StateController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $states = State::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('country')->latest()->paginate(20);
+        $states = State::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('country')->latest()->paginate(500);
         return response()->json(compact('states'));
     }
 

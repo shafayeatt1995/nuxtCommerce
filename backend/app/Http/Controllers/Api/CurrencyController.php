@@ -98,7 +98,7 @@ class CurrencyController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $currencies = Currency::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(20);
+        $currencies = Currency::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('currencies'));
     }
 

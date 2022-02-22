@@ -106,7 +106,7 @@ class ChildCategoryController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $categories = ChildCategory::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category', 'subCategory')->latest()->paginate(20);
+        $categories = ChildCategory::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category', 'subCategory')->latest()->paginate(500);
         return response()->json(compact('categories'));
     }
 

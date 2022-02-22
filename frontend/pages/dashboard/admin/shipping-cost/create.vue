@@ -15,8 +15,7 @@
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
 						</div>
 						<div class="d-block">
-							<h4 class="mb-3" v-if="form.rules.length < 1">No Rules</h4>
-							<table class="table text-center table-responsive-md" v-else>
+							<table class="table text-center table-responsive-md">
 								<thead>
 									<tr>
 										<th scope="col">#</th>
@@ -26,7 +25,14 @@
 										<th scope="col">Action</th>
 									</tr>
 								</thead>
-								<tbody class="text-center">
+								<tbody class="text-center" v-if="form.rules.length < 1">
+									<tr>
+										<td colspan="5">
+											<h4>No Rules</h4>
+										</td>
+									</tr>
+								</tbody>
+								<tbody class="text-center" v-else>
 									<tr v-for="(rule, key) in form.rules" :key="key">
 										<td>{{key + 1}}</td>
 										<td>{{rule.fromWeight}} KG</td>

@@ -94,7 +94,7 @@ class CountryController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $countries = Country::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(20);
+        $countries = Country::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('countries'));
     }
 

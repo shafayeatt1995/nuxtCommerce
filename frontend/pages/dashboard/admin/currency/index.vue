@@ -7,7 +7,7 @@
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
-				<h4 class="w-100 text-center mb-3">Always keep the default currency exchange rate 1</h4>
+				<h4 class="w-100 text-center mb-3">Always set the default currency exchange rate 1</h4>
 				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
 					<form class="d-flex mb-3" @submit.prevent="action === 'delete' ? deleteCurrency() : ''">
 						<select class="form-control" v-model="action">

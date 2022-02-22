@@ -104,8 +104,8 @@
 									<li><a href="about.html">{{$t('aboutUs')}}</a></li>
 									<li><a href="contact-us.html">{{$t('contacts')}} </a></li>
 									<li>
-										<nuxt-link :to="localePath('dashboard', 'en')" target="_blank" v-if="authCheck">{{$t('becomeASeller')}}</nuxt-link>
-										<nuxt-link :to="localePath('dashboard-login', 'en')" target="_blank" v-else>{{$t('becomeASeller')}}</nuxt-link>
+										<nuxt-link :to="localePath('seller-regestration')" v-if="authCheck">{{$t('becomeASeller')}}</nuxt-link>
+										<nuxt-link :to="localePath('login')" v-else>{{$t('becomeASeller')}}</nuxt-link>
 									</li>
 								</ul>
 							</div>

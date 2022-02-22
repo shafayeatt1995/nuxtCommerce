@@ -87,7 +87,7 @@ class MaterialController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $materials = Material::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(20);
+        $materials = Material::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('materials'));
     }
 

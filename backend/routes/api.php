@@ -8,10 +8,24 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     // Frontend API
     Route::post('login', 'AuthController@login');
+    Route::post('dashboard-login', 'AuthController@dashboardLogin');
     Route::post('register', 'AuthController@register');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('user', 'AuthController@user');
+
+    //Seller Controller
+    Route::get('store-all', 'StoreController@index');
+    Route::get('store-active', 'StoreController@storeActive');
+    Route::get('store-pending', 'StoreController@storePending');
+    Route::get('store-suspend', 'StoreController@storeSuspend');
+    Route::get('pending-store', 'StoreController@pendingStore');
+    Route::post('search-store', 'StoreController@searchStore');
+    Route::get('edit-store/{id}', 'StoreController@editStore');
+    Route::post('seller-regestration', 'StoreController@sellerRegestration');
+    Route::post('change-store-status', 'StoreController@changeStoreStatus');
+    Route::post('store-status/{id}', 'StoreController@storeStatus');
+    Route::post('update-store/{id}', 'StoreController@updateStore');
 
     //Plan Controller
     Route::get('plan', 'PlanController@index');

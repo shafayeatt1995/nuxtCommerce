@@ -94,7 +94,7 @@ class CategoryController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $categories = Category::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(20);
+        $categories = Category::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('categories'));
     }
 

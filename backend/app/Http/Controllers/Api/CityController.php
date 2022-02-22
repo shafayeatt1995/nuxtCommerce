@@ -106,7 +106,7 @@ class CityController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $cities = City::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('country', 'state')->latest()->paginate(20);
+        $cities = City::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('country', 'state')->latest()->paginate(500);
         return response()->json(compact('cities'));
     }
 

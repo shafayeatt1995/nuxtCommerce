@@ -116,7 +116,7 @@ class BrandController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $brands = Brand::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->paginate(20);
+        $brands = Brand::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->paginate(500);
         return response()->json(compact('brands'));
     }
 }

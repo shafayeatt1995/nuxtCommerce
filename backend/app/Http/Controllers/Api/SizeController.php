@@ -100,7 +100,7 @@ class SizeController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $sizes = Size::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category', 'subCategory')->latest()->paginate(20);
+        $sizes = Size::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category', 'subCategory')->latest()->paginate(500);
         return response()->json(compact('sizes'));
     }
 
