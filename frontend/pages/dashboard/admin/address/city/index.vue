@@ -16,7 +16,7 @@
 						<button type="submit" class="btn btn-primary">Apply Action</button>
 					</form>
 					<form class="d-flex mb-3" @submit.prevent="search">
-						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword">
+						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword" @keyup="instantSearch">
 						<select class="form-control" v-model="searchOption.collum">
 							<option value="name">Search by City</option>
 						</select>
@@ -192,6 +192,25 @@
 							this.click = true;
 						}
 					);
+				}
+			},
+			instantSearch() {
+				if (this.click) {
+					this.click = false;
+					this.loading = true;
+					setTimeout(() => {
+						this.$axios.post("search-city", this.searchOption).then(
+							(response) => {
+								this.cities = response.data.cities;
+								this.loading = false;
+								this.click = true;
+							},
+							(error) => {
+								$nuxt.$emit("error", error);
+								this.click = true;
+							}
+						);
+					}, 500);
 				}
 			},
 

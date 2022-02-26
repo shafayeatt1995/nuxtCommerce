@@ -50,10 +50,10 @@
 				);
 			});
 
-			//Trigger Error Toast Message
-			// this.$nuxt.$on("error", (error) => {
-			// 	this.$toast.error(error.response.data);
-			// });
+			// Trigger Error Toast Message
+			this.$nuxt.$on("customError", (message) => {
+				this.$toast.error(message);
+			});
 
 			//Trigger Info Toast Message
 			this.$nuxt.$on("warning", (warning) => {

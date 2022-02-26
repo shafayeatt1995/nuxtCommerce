@@ -20,8 +20,8 @@ class ChildCategoryController extends Controller
 
     public function childCategoryList($id)
     {
-        $this->authorize('admin');
-        $childCategories = ChildCategory::where('sub_category_id', $id)->orderBy('name')->get();
+        $this->authorize('adminOrSeller');
+        $childCategories = ChildCategory::where('sub_category_id', $id)->orderBy('name')->select('id', 'name')->get();
         return response()->json(compact('childCategories'));
     }
 

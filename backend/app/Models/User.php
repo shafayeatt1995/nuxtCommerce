@@ -45,6 +45,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'suspend' => 'boolean',
     ];
 
     public function getJWTIdentifier()
@@ -65,5 +66,10 @@ class User extends Authenticatable implements JWTSubject
     public function store()
     {
         return $this->hasOne(Store::class);
+    }
+
+    public function newRequest()
+    {
+        return $this->hasMany(NewRequest::class);
     }
 }

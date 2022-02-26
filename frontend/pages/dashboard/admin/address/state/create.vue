@@ -88,6 +88,9 @@
 						(response) => {
 							$nuxt.$emit("success", response.data);
 							this.click = true;
+							this.$router.push(
+								this.localePath("dashboard-admin-shipping-cost-set")
+							);
 						},
 						(error) => {
 							this.errors = error.response.data.errors;

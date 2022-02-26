@@ -49,6 +49,7 @@
 			</transition>
 		</div>
 		<div class="text-center" v-else>
+			<img :data-src="url + 'images/store-slde-show.svg'" class="img-fluid h-350" v-lazy-load />
 			<h2>You Already Grant This Permission</h2>
 		</div>
 	</div>

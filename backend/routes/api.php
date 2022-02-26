@@ -38,6 +38,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     //Brand Controller
     Route::get('brand', 'BrandController@index');
+    Route::get('brand-list', 'BrandController@brandList');
     Route::get('edit-brand/{id}', 'BrandController@editBrand');
     Route::post('create-brand', 'BrandController@createBrand');
     Route::post('update-brand/{id}', 'BrandController@updateBrand');
@@ -113,6 +114,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
 
     //Commission Controller
     Route::get('commission', 'CommissionController@index');
+    Route::post('search-commission', 'CommissionController@searchCommission');
     Route::post('update-commission', 'CommissionController@updateCommission');
 
     //Country Controller
@@ -155,6 +157,16 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('delete-shipping-cost', 'ShippingCostController@deleteShippingCost');
     Route::post('search-shipping-cost', 'ShippingCostController@searchShippingCost');
     Route::post('update-shipping-cost-rules', 'ShippingCostController@updateShippingCostRules');
+
+    //Request Controller
+    Route::get('request/{status}', 'RequestController@index');
+    Route::get('pending-request', 'RequestController@myRequest');
+    Route::get('my-request', 'RequestController@myRequest');
+    Route::post('approve-request/{id}', 'RequestController@approveRequest');
+    Route::post('reject-request/{id}', 'RequestController@rejectRequest');
+    Route::post('delete-request', 'RequestController@deleteRequest');
+    Route::post('delete-my-request', 'RequestController@deleteMyRequest');
+    Route::post('request-brand', 'RequestController@requestBrand');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

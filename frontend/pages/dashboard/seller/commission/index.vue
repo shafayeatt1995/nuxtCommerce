@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Commission</h1>
+			<h1>Commission List</h1>
 		</div>
 
 		<div class="section-body">
@@ -26,7 +26,7 @@
 							<th scope="col">Sub Category</th>
 							<th scope="col">Commission type</th>
 							<th scope="col">Commission</th>
-							<th scope="col">Action</th>
+							<th scope="col">Last Update</th>
 						</tr>
 					</thead>
 					<tbody class="text-center" v-if="loading">
@@ -43,53 +43,19 @@
 								{{sub.name}}
 							</td>
 							<td>
-								<div v-if="form.subCategoryId === sub.id">
-									<form @submit.prevent="updateCommission">
-										<select class="form-control" v-model="form.type">
-											<option :value="null">Free</option>
-											<option :value="false">Percent</option>
-											<option :value="true">Fixed</option>
-										</select>
-									</form>
-								</div>
-								<div v-else>
-									<span class="badge badge-danger" v-if="sub.commission && sub.commission.type == null">Free</span>
-									<span class="badge badge-success color-black" v-else-if="sub.commission && sub.commission.type">Fixed</span>
-									<span class="badge badge-success color-black" v-else-if="sub.commission && !sub.commission.type">Percent</span>
-									<span class="badge badge-danger" v-else>Not Set</span>
-								</div>
+								<span class="badge badge-danger" v-if="sub.commission && sub.commission.type == null">Free</span>
+								<span class="badge badge-success color-black" v-else-if="sub.commission && sub.commission.type">Fixed</span>
+								<span class="badge badge-success color-black" v-else-if="sub.commission && !sub.commission.type">Percent</span>
+								<span class="badge badge-danger" v-else>Not Set</span>
 							</td>
 							<td>
-								<div v-if="form.subCategoryId === sub.id">
-									<form @submit.prevent="updateCommission">
-										<input type="number" step="0.01" class="form-control" v-model="form.commission">
-									</form>
-								</div>
-								<div v-else>
-									<span class="badge badge-danger" v-if="sub.commission && sub.commission.type === null">Free</span>
-									<span class="badge badge-success color-black" v-else-if="sub.commission && sub.commission.type">{{sub.commission.commission}}</span>
-									<span class="badge badge-success color-black" v-else-if="sub.commission && !sub.commission.type">% {{sub.commission.commission}}</span>
-									<span class="badge badge-danger" v-else>Not Set</span>
-								</div>
+								<span class="badge badge-danger" v-if="sub.commission && sub.commission.type === null">Free</span>
+								<span class="badge badge-success color-black" v-else-if="sub.commission && sub.commission.type">{{sub.commission.commission}}</span>
+								<span class="badge badge-success color-black" v-else-if="sub.commission && !sub.commission.type">% {{sub.commission.commission}}</span>
+								<span class="badge badge-danger" v-else>Not Set</span>
 							</td>
 							<td>
-								<button type="button" class="btn btn-icon btn-primary mx-2 my-2" v-if="form.subCategoryId !== sub.id" @click="commissionForm(sub)">
-									<i>
-										<icon :icon="['fas', 'edit']"></icon>
-									</i>
-								</button>
-								<div v-else>
-									<button class="btn btn-icon btn-success m-2" type="button" @click="updateCommission">
-										<i>
-											<icon :icon="['fas', 'check']"></icon>
-										</i>
-									</button>
-									<button class="btn btn-icon btn-danger m-2" v-if="form.subCategoryId === sub.id" @click="commissionForm(sub)">
-										<i>
-											<icon :icon="['fas', 'times']"></icon>
-										</i>
-									</button>
-								</div>
+								{{sub.commission.updated_at | normalDate}}
 							</td>
 						</tr>
 					</tbody>
@@ -107,7 +73,7 @@
 <script>
 	export default {
 		name: "all-commissions",
-		middleware: "admin",
+		middleware: "seller",
 		head() {
 			return {
 				title: `Commission - ${this.appName}`,

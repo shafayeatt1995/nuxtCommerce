@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Commission;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -19,8 +20,8 @@ class SubCategoryController extends Controller
 
     public function subCategoryList($id)
     {
-        $this->authorize('admin');
-        $subCategories = SubCategory::where('category_id', $id)->orderBy('name')->get();
+        $this->authorize('adminOrSeller');
+        $subCategories = SubCategory::where('category_id', $id)->orderBy('name')->select('id', 'name')->get();
         return response()->json(compact('subCategories'));
     }
 
@@ -39,6 +40,12 @@ class SubCategoryController extends Controller
         $subCategory->slug = Str::slug($request->name) . Str::random(1);
         $subCategory->status = $request->status;
         $subCategory->save();
+
+        $comission = new Commission();
+        $comission->sub_category_id = $subCategory->id;
+        $comission->type = null;
+        $comission->commission = 0;
+        $comission->save();
         return response()->json('Sub category successfully created');
     }
 

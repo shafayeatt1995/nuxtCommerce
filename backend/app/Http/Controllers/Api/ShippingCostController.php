@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ShippingCost;
 use App\Models\ShippingCostRule;
+use App\Models\State;
 use Illuminate\Http\Request;
 
 class ShippingCostController extends Controller
@@ -86,8 +87,8 @@ class ShippingCostController extends Controller
         $request->validate([
             "collum" => "required"
         ]);
-        $costs = ShippingCost::where($request->collum, "LIKE", "%" . $request->keyword . "%")->latest()->paginate(500);
-        return response()->json(compact("costs"));
+        $states = State::where($request->collum, "LIKE", "%" . $request->keyword . "%")->with('shpippingCostRule.shippingCost')->latest()->paginate(500);
+        return response()->json(compact('states'));
     }
 
     public function updateShippingCostRules(Request $request)

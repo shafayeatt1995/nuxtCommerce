@@ -123,10 +123,10 @@
 					<transition name="slide" mode="out-in">
 						<ul class="sidebar-dropdown-menu" v-if="currency || route.substring(17, 25) === 'currency'">
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-currency-create')">Create Currency</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-admin-currency')">All Currency</nuxt-link>
 							</li>
 							<li>
-								<nuxt-link :to="localePath('dashboard-admin-currency')">All Currency</nuxt-link>
+								<nuxt-link :to="localePath('dashboard-admin-currency-create')">Create Currency</nuxt-link>
 							</li>
 						</ul>
 					</transition>
@@ -182,6 +182,15 @@
 					</transition>
 				</li>
 				<li>
+					<nuxt-link :to="localePath('dashboard-admin-request')">
+						<i>
+							<icon :icon="['fas', 'plus']"></icon>
+						</i>
+						<span>Request</span>
+
+					</nuxt-link>
+				</li>
+				<li>
 					<nuxt-link :to="localePath('dashboard-admin-commission')">
 						<i>
 							<icon :icon="['fas', 'percent']"></icon>
@@ -201,7 +210,7 @@
 					</nuxt-link>
 				</li>
 				<li class="sidebar-dropdown">
-					<a href="#" class="has-dropdown" :class="product || route.substring(17, 24) === 'product' ? 'dropdown-active' : ''" @click.prevent="product = !product">
+					<a href="#" class="has-dropdown" :class="product || route.substring(18, 25) === 'product' ? 'dropdown-active' : ''" @click.prevent="product = !product">
 						<i>
 							<icon :icon="['fas', 'boxes']"></icon>
 						</i>
@@ -212,7 +221,7 @@
 						</span>
 					</a>
 					<transition name="slide" mode="out-in">
-						<ul class="sidebar-dropdown-menu" v-if="product || route.substring(17, 24) === 'product'">
+						<ul class="sidebar-dropdown-menu" v-if="product || route.substring(18, 25) === 'product'">
 							<li>
 								<nuxt-link :to="localePath('dashboard-seller-product')">All Product</nuxt-link>
 							</li>
@@ -221,6 +230,37 @@
 							</li>
 						</ul>
 					</transition>
+				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="request || route.substring(18, 25) === 'request' ? 'dropdown-active' : ''" @click.prevent="request = !request">
+						<i>
+							<icon :icon="['fas', 'plus']"></icon>
+						</i>
+						<span>Request
+							<i :class="request">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="request || route.substring(18, 25) === 'request'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-seller-request')">My Request</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-seller-request-brand')">Request Brand</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
+				<li>
+					<nuxt-link :to="localePath('dashboard-seller-commission')">
+						<i>
+							<icon :icon="['fas', 'percent']"></icon>
+						</i>
+						<span>Commission List</span>
+
+					</nuxt-link>
 				</li>
 			</ul>
 		</aside>
@@ -243,6 +283,7 @@
 				address: false,
 				cost: false,
 				product: false,
+				request: false,
 			};
 		},
 

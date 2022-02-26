@@ -88,6 +88,9 @@
 						(response) => {
 							$nuxt.$emit("success", response.data);
 							this.click = true;
+							this.$router.push(
+								this.localePath("dashboard-admin-commission")
+							);
 						},
 						(error) => {
 							this.errors = error.response.data.errors;

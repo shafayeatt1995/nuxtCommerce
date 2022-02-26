@@ -3915,4 +3915,29 @@ body.layout-3 .main-footer {
 	grid-gap: 5px;
 }
 
+.float-info {
+	border: 1px solid #ddd;
+	padding: 5px 10px;
+	margin-left: 10px;
+	position: relative;
+	background: #fff;
+}
+
+.float-info:before {
+	position: absolute;
+	content: "";
+	height: 12px;
+	width: 12px;
+	left: -7px;
+	border-left: 1px solid #ddd;
+	transform: rotate(45deg);
+	border-bottom: 1px solid #ddd;
+	background: #fff;
+	top: 7px;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
 /*# sourceMappingURL=style.css.map */

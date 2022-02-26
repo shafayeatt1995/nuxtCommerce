@@ -14,9 +14,9 @@
 						<button type="button" class="btn btn-danger" @click="getMyStore('suspend')">Suspend Store ({{suspend}})</button>
 					</div>
 					<form class="d-flex mb-3" @submit.prevent="search">
-						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword">
+						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword" @keyup="instantSearch">
 						<select class="form-control" v-model="searchOption.collum">
-							<option value="name">Search by name</option>
+							<option value="name">Search by store name</option>
 						</select>
 						<button type="submit" class="btn btn-primary">
 							<i>
@@ -216,6 +216,25 @@
 							this.click = true;
 						}
 					);
+				}
+			},
+			instantSearch() {
+				if (this.click) {
+					this.click = false;
+					this.loading = true;
+					setTimeout(() => {
+						this.$axios.post("search-store", this.searchOption).then(
+							(response) => {
+								this.stores = response.data.stores;
+								this.loading = false;
+								this.click = true;
+							},
+							(error) => {
+								$nuxt.$emit("error", error);
+								this.click = true;
+							}
+						);
+					}, 500);
 				}
 			},
 

@@ -9,7 +9,7 @@
 			<div class="row bg-white rounded p-3 shadow">
 				<div class="d-flex w-100 justify-content-end flex-lg-row flex-column">
 					<form class="d-flex mb-3" @submit.prevent="search">
-						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword">
+						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword" @keyup="instantSearch">
 						<select class="form-control" v-model="searchOption.collum">
 							<option value="name">Search by name</option>
 						</select>
@@ -156,6 +156,25 @@
 							this.click = true;
 						}
 					);
+				}
+			},
+			instantSearch() {
+				if (this.click) {
+					this.click = false;
+					this.loading = true;
+					setTimeout(() => {
+						this.$axios.post("search-category", this.searchOption).then(
+							(response) => {
+								this.products = response.data.products;
+								this.loading = false;
+								this.click = true;
+							},
+							(error) => {
+								$nuxt.$emit("error", error);
+								this.click = true;
+							}
+						);
+					}, 500);
 				}
 			},
 

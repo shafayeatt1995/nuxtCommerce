@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\NewRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -15,6 +16,13 @@ class BrandController extends Controller
     {
         $this->authorize('admin');
         $brands = Brand::latest()->paginate(20);
+        return response()->json(compact('brands'));
+    }
+
+    public function brandList()
+    {
+        $this->authorize('adminOrSeller');
+        $brands = Brand::orderBy('name')->select('id', 'name')->get();
         return response()->json(compact('brands'));
     }
 

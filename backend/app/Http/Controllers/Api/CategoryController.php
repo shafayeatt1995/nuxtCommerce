@@ -18,8 +18,8 @@ class CategoryController extends Controller
 
     public function categoryList()
     {
-        $this->authorize('admin');
-        $categories = Category::orderBy('name')->get();
+        $this->authorize('adminOrSeller');
+        $categories = Category::orderBy('name')->select('id', 'name')->get();
         return response()->json(compact('categories'));
     }
 

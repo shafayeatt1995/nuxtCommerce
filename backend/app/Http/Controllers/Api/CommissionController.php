@@ -11,8 +11,18 @@ class CommissionController extends Controller
 {
     public function index()
     {
-        $this->authorize('admin');
+        $this->authorize('adminOrSeller');
         $subCategories = SubCategory::with('category', 'commission')->latest()->paginate(50);
+        return response()->json(compact('subCategories'));
+    }
+
+    public function searchCommission(Request $request)
+    {
+        $this->authorize('adminOrSeller');
+        $request->validate([
+            "collum" => "required"
+        ]);
+        $subCategories = SubCategory::with('category', 'commission')->where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('subCategories'));
     }
 
@@ -21,14 +31,13 @@ class CommissionController extends Controller
         $this->authorize('admin');
         $request->validate([
             'subCategoryId' => 'required|numeric',
-            'type' => 'required|boolean',
             'commission' => 'required|numeric',
         ]);
         $exist = Commission::where('sub_category_id', $request->subCategoryId)->first();
         $comission = $exist ? $exist : new Commission();
         $comission->sub_category_id = $request->subCategoryId;
         $comission->type = $request->type;
-        $comission->commission = $request->commission;
+        $comission->commission = $request->type === null ? 0 : $request->commission;
         $comission->save();
         return response()->json('Commission successfully updated');
     }
