@@ -31,4 +31,9 @@ class SubCategory extends Model
     {
         return $this->hasOne(Commission::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class,);
+    }
 }

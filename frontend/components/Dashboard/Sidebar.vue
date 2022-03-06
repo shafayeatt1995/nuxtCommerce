@@ -181,6 +181,25 @@
 						</ul>
 					</transition>
 				</li>
+				<li class="sidebar-dropdown">
+					<a href="#" class="has-dropdown" :class="product || route.substring(17, 24) === 'product' ? 'dropdown-active' : ''" @click.prevent="product = !product">
+						<i>
+							<icon :icon="['fas', 'boxes']"></icon>
+						</i>
+						<span>Product
+							<i :class="product">
+								<icon :icon="['fas', 'chevron-right']"></icon>
+							</i>
+						</span>
+					</a>
+					<transition name="slide" mode="out-in">
+						<ul class="sidebar-dropdown-menu" v-if="product || route.substring(17, 24) === 'product'">
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-product-pending')">Pendiing Product</nuxt-link>
+							</li>
+						</ul>
+					</transition>
+				</li>
 				<li>
 					<nuxt-link :to="localePath('dashboard-admin-request')">
 						<i>

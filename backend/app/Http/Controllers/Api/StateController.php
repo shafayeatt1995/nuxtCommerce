@@ -82,7 +82,7 @@ class StateController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -103,7 +103,7 @@ class StateController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $states = State::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('country')->latest()->paginate(500);
         return response()->json(compact('states'));

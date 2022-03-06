@@ -18,7 +18,7 @@ class StoreController extends Controller
 {
     public function index()
     {
-        $this->authorize("admin");
+        $this->authorize('admin');
         $stores = Store::with('user')->latest()->paginate(20);
         $all = Store::all()->count();
         $active = Store::where('pending', false)->where('suspend', false)->count();
@@ -29,42 +29,42 @@ class StoreController extends Controller
 
     public function storeActive()
     {
-        $this->authorize("admin");
+        $this->authorize('admin');
         $stores = Store::where('pending', false)->where('suspend', false)->with('user')->latest()->paginate(20);
         return response()->json(compact('stores'));
     }
 
     public function storePending()
     {
-        $this->authorize("admin");
+        $this->authorize('admin');
         $stores = Store::where('pending', true)->with('user')->latest()->paginate(20);
         return response()->json(compact('stores'));
     }
 
     public function storeSuspend()
     {
-        $this->authorize("admin");
+        $this->authorize('admin');
         $stores = Store::where('suspend', true)->with('user')->latest()->paginate(20);
         return response()->json(compact('stores'));
     }
 
     public function pendingStore()
     {
-        $this->authorize("admin");
-        $stores = Store::with('user')->where("pending", true)->latest()->paginate(20);
-        return response()->json(compact("stores"));
+        $this->authorize('admin');
+        $stores = Store::with('user')->where('pending', true)->latest()->paginate(20);
+        return response()->json(compact('stores'));
     }
 
     public function editStore($id)
     {
-        $this->authorize("admin");
-        $store = Store::where("id", $id)->first();
-        return response()->json(compact("store"));
+        $this->authorize('admin');
+        $store = Store::where('id', $id)->first();
+        return response()->json(compact('store'));
     }
 
     public function sellerRegestration(Request $request)
     {
-        $this->authorize("customer");
+        $this->authorize('customer');
         $request->validate([
             'name' => 'required',
             'phone' => 'required',
@@ -96,17 +96,17 @@ class StoreController extends Controller
             $store->save();
             return response()->json('Requuest submit successfully');
         } else {
-            return response()->json(["message" => "We are review your request"], 422);
+            return response()->json(['message' => 'We are review your request'], 422);
         }
     }
 
     public function changeStoreStatus(Request $request)
     {
-        $this->authorize("admin");
+        $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1",
-                "action" => "required"
+                'idList' => 'required|array|min:1',
+                'action' => 'required'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -115,7 +115,7 @@ class StoreController extends Controller
         foreach ($request->idList as $id) {
             $store = Store::where('id', $id)->with('user')->first();
             if (isset($store)) {
-                $user = User::where("id", $store->user_id)->first();
+                $user = User::where('id', $store->user_id)->first();
                 if ($request->action === 'approve') {
                     $store->pending = false;
                     $store->save();
@@ -137,7 +137,7 @@ class StoreController extends Controller
 
     public function updateStore(Request $request, $id)
     {
-        $this->authorize("admin");
+        $this->authorize('admin');
         $request->validate([
             'name' => 'required',
             'phone' => 'required',
@@ -145,7 +145,7 @@ class StoreController extends Controller
             'description' => 'required',
         ]);
 
-        $store = Store::where("id", $id)->first();
+        $store = Store::where('id', $id)->first();
 
         $slug = Str::slug($request->name);
         $path = 'images/store/logo/';
@@ -173,8 +173,8 @@ class StoreController extends Controller
 
     public function storeStatus($id)
     {
-        $this->authorize("admin");
-        $store = Store::where("id", $id)->first();
+        $this->authorize('admin');
+        $store = Store::where('id', $id)->first();
         $store->suspend = !$store->suspend;
         $store->save();
         return response()->json('Store status update successfully');
@@ -184,7 +184,7 @@ class StoreController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $stores = Store::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('user')->latest()->paginate(500);
         return response()->json(compact('stores'));

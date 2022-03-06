@@ -64,7 +64,7 @@ class MaterialController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -85,7 +85,7 @@ class MaterialController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $materials = Material::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('materials'));

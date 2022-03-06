@@ -49,7 +49,7 @@
 							<th scope="row">
 								<input class="form-check-input" type="checkbox" v-model="select" :value="brand.id">
 							</th>
-							<td><img :src="url + brand.logo" :alt="brand.name" class="img-fluid"></td>
+							<td><img :src="url + brand.logo" :alt="brand.name" class="img-fluid p-2 max-w250 max-h250"></td>
 							<td>{{brand.name}}</td>
 							<td>{{brand.created_at | date}}</td>
 							<td>

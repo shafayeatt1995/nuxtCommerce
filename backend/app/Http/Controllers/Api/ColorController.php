@@ -80,7 +80,7 @@ class ColorController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -101,7 +101,7 @@ class ColorController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $colors = Color::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('colors'));

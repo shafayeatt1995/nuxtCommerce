@@ -16,7 +16,7 @@ class AppController extends Controller
 	public function app()
 	{
 		$appName = env('APP_NAME');
-		$activeCurrency = Currency::where("default", true)->first();
+		$activeCurrency = Currency::where('default', true)->first();
 		return response()->json(compact('appName', 'activeCurrency'));
 	}
 }

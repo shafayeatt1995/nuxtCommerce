@@ -26,4 +26,9 @@ class ChildCategory extends Model
     {
         return $this->hasMany(Size::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class,);
+    }
 }

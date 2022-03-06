@@ -19,9 +19,11 @@ class CreateVariationsTable extends Migration
             $table->unsignedBigInteger('color_id');
             $table->unsignedBigInteger('size_id');
             $table->decimal('price', 8, 2);
+            $table->boolean('discount');
             $table->decimal('special_price', 8, 2)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->boolean('inventory');
             $table->integer('quantity')->nullable();
             $table->string('sku')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

@@ -167,6 +167,19 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('delete-request', 'RequestController@deleteRequest');
     Route::post('delete-my-request', 'RequestController@deleteMyRequest');
     Route::post('request-brand', 'RequestController@requestBrand');
+
+    //Product Controller
+    Route::get('product', 'ProductController@index');
+    Route::get('new-product-info', 'ProductController@newProductInfo');
+    Route::get('edit-product-info/{id}', 'ProductController@editProductInfo');
+    Route::get('product-child-category-list/{id}', 'ProductController@productChildCategoryList');
+    Route::post('create-product', 'ProductController@createProduct');
+    Route::post('upload-product-image/{slug}', 'ProductController@uploadProductImage');
+    Route::post('update-product/{id}', 'ProductController@updateProduct');
+    Route::post('update-product-image/{slug}', 'ProductController@updateProductImage');
+    Route::post('status-product/{id}', 'ProductController@statusProduct');
+    Route::post('search-product', 'ProductController@searchProduct');
+    Route::post('delete-product/{id}', 'ProductController@deleteProduct');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

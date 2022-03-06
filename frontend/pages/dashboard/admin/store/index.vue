@@ -79,7 +79,7 @@
 			</div>
 		</div>
 		<transition name="fade" mode="out-in">
-			<DashboardModal v-if="dashboardModal">
+			<DashboardModal v-if="dashboardModal === 'store'" title="Store Details">
 				<table class="table table-striped text-center table-responsive-md">
 					<thead>
 						<tr>
@@ -116,8 +116,8 @@
 							<td>Store Status</td>
 							<td>
 								<span class="badge badge-warning color-black" v-if="storeModal.pending">Pending</span>
-								<button class="badge badge-danger" type="button" @click="changeStatus(storeModal.id)" v-else-if="storeModal.suspend">Suspend</button>
-								<button class="badge badge-success color-black" type="button" @click="changeStatus(storeModal.id)" v-else>Active</button>
+								<span class="badge badge-danger" v-else-if="storeModal.suspend">Suspend</span>
+								<span class="badge badge-success color-black" v-else>Active</span>
 							</td>
 						</tr>
 					</tbody>
@@ -181,7 +181,7 @@
 			// Open Modal
 			viewStore(store) {
 				this.storeModal = store;
-				this.$store.dispatch("dashboardModal", true);
+				this.$store.dispatch("dashboardModal", "store");
 			},
 
 			// Change Store status

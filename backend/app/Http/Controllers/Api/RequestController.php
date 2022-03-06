@@ -28,14 +28,14 @@ class RequestController extends Controller
         $active = NewRequest::where('status', true)->count();
         $pending = NewRequest::where('status', null)->count();
         $reject = NewRequest::where('status', false)->count();
-        return response()->json(compact("requests", "all", "active", "pending", "reject"));
+        return response()->json(compact('requests', 'all', 'active', 'pending', 'reject'));
     }
 
     public function myRequest()
     {
         $this->authorize('seller');
-        $requests = NewRequest::where("user_id", Auth::id())->orderBy('created_at', 'desc')->paginate(20);
-        return response()->json(compact("requests"));
+        $requests = NewRequest::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(20);
+        return response()->json(compact('requests'));
     }
 
     public function approveRequest($id)
@@ -61,7 +61,7 @@ class RequestController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -86,7 +86,7 @@ class RequestController extends Controller
         $this->authorize('seller');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -126,7 +126,7 @@ class RequestController extends Controller
             $newRequest = new NewRequest();
             $newRequest->user_id = Auth::id();
             $newRequest->name = $request->name;
-            $newRequest->message = "Need a new brand";
+            $newRequest->message = 'Need a new brand';
             $newRequest->image = $imageName;
             $newRequest->save();
         };

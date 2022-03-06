@@ -24,10 +24,12 @@ class CreateProductsTable extends Migration
             $table->string('slug')->unique();
             $table->text('features');
             $table->text('description');
-            $table->string('box');
-            $table->text('images');
+            $table->text('items');
+            $table->text('specifications');
+            $table->text('tags');
+            $table->text('meta');
             $table->decimal('weight', 6, 3);
-            $table->decimal('rating', 3, 2);
+            $table->decimal('rating', 3, 2)->default(0.00);
             $table->boolean('stock')->default(true);
             $table->boolean('status')->default(true);
             $table->boolean('pending')->default(true);

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Create Sub-Category</h1>
+			<h1>Create Child-Category</h1>
 		</div>
 
 		<div class="section-body">

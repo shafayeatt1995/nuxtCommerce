@@ -6,7 +6,11 @@ export const state = () => ({
 		icon: '',
 		rate: ''
 	},
-	dashboardModal: false,
+	defaultCurrency: {
+		icon: '',
+		rate: ''
+	},
+	dashboardModal: '',
 })
 
 export const getters = {
@@ -17,8 +21,10 @@ export const getters = {
 	isAdmin: (state) => state.auth.loggedIn ? state.auth.user.role_id === 1 ? true : false : false,
 	isSeller: (state) => state.auth.loggedIn ? state.auth.user.role_id === 2 ? true : false : false,
 	isCustomer: (state) => state.auth.loggedIn ? state.auth.user.role_id === 3 ? true : false : false,
-	currencyIcon: (state) => state.activeCurrency.icon,
-	currencyRate: (state) => state.activeCurrency.rate,
+	activeCurrencyIcon: (state) => state.activeCurrency.icon,
+	activeCurrencyRate: (state) => state.activeCurrency.rate,
+	defaultCurrencyIcon: (state) => state.defaultCurrency.icon,
+	defaultCurrencyRate: (state) => state.defaultCurrency.rate,
 	dashboardModal: (state) => state.dashboardModal,
 }
 
@@ -28,11 +34,8 @@ export const mutations = {
 		state.appName = response.data.appName;
 		state.activeCurrency.icon = response.data.activeCurrency.symble;
 		state.activeCurrency.rate = response.data.activeCurrency.rate;
-		// if (process.client) {
-		// 	console.log('anik');
-		// 	localStorage.setItem('currencyIcon', response.data.activeCurrency.symble);
-		// 	localStorage.setItem('currencyRate', response.data.activeCurrency.rate);
-		// }
+		state.defaultCurrency.icon = response.data.activeCurrency.symble;
+		state.defaultCurrency.rate = response.data.activeCurrency.rate;
 	},
 
 	dashboardModal(state, status) {

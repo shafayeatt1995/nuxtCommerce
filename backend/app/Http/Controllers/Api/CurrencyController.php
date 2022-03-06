@@ -75,7 +75,7 @@ class CurrencyController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -96,7 +96,7 @@ class CurrencyController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $currencies = Currency::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('currencies'));

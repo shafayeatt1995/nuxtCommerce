@@ -20,7 +20,7 @@ class CommissionController extends Controller
     {
         $this->authorize('adminOrSeller');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $subCategories = SubCategory::with('category', 'commission')->where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('subCategories'));

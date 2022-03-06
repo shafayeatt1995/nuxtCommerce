@@ -1,24 +1,13 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Products</h1>
-			<nuxt-link :to="localePath('dashboard-seller-product-create')" class="btn btn-primary">Create Product</nuxt-link>
+			<h1>Pending Products</h1>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
-				<div class="d-flex w-100 justify-content-end flex-lg-row flex-column">
-					<form class="d-flex mb-3" @submit.prevent="search">
-						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword" @keyup="instantSearch">
-						<select class="form-control" v-model="searchOption.collum">
-							<option value="name">Search by name</option>
-						</select>
-						<button type="submit" class="btn btn-primary">
-							<i>
-								<icon :icon="['fas', 'search']"></icon>
-							</i>
-						</button>
-					</form>
+				<div class="d-flex w-100 flex-lg-row flex-column">
+					<buutton type="buttton" class="btn btn-primaryr">Anik</buutton>
 				</div>
 				<table class="table table-striped text-center table-responsive-md">
 					<thead>
@@ -267,11 +256,11 @@
 </template>
 <script>
 	export default {
-		name: "all-products",
-		middleware: "seller",
+		name: "pending-products",
+		middleware: "admin",
 		head() {
 			return {
-				title: `All Products - ${this.appName}`,
+				title: `Pending Products - ${this.appName}`,
 			};
 		},
 		data() {
@@ -289,7 +278,7 @@
 		methods: {
 			//Get Product
 			getProduct() {
-				this.$axios.get("product").then(
+				this.$axios.get("pending-product").then(
 					(response) => {
 						this.products = response.data.products;
 						this.loading = false;
@@ -300,7 +289,7 @@
 				);
 			},
 			getResults(page = 1) {
-				this.$axios.get("product?page=" + page).then((response) => {
+				this.$axios.get("pending-product?page=" + page).then((response) => {
 					this.products = response.data.products;
 				});
 			},
@@ -337,43 +326,6 @@
 								this.click = true;
 							}
 						});
-				}
-			},
-
-			search() {
-				if (this.click) {
-					this.click = false;
-					this.loading = true;
-					this.$axios.post("search-product", this.searchOption).then(
-						(response) => {
-							this.products = response.data.products;
-							this.loading = false;
-							this.click = true;
-						},
-						(error) => {
-							$nuxt.$emit("error", error);
-							this.click = true;
-						}
-					);
-				}
-			},
-			instantSearch() {
-				if (this.click) {
-					this.click = false;
-					this.loading = true;
-					setTimeout(() => {
-						this.$axios.post("search-product", this.searchOption).then(
-							(response) => {
-								this.products = response.data.products;
-								this.loading = false;
-								this.click = true;
-							},
-							(error) => {
-								$nuxt.$emit("error", error);
-								this.click = true;
-							}
-						);
-					}, 500);
 				}
 			},
 

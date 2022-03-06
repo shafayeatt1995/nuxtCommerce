@@ -14,8 +14,10 @@ const GlobalData = {
 					admin: 'isAdmin',
 					seller: 'isSeller',
 					customer: 'isCustomer',
-					currencyIcon: 'currencyIcon',
-					currencyRate: 'currencyRate',
+					activeCurrencyIcon: 'activeCurrencyIcon',
+					activeCurrencyRate: 'activeCurrencyRate',
+					defaultCurrencyIcon: 'defaultCurrencyIcon',
+					defaultCurrencyRate: 'defaultCurrencyRate',
 					dashboardModal: 'dashboardModal',
 				})
 			}

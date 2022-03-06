@@ -26,4 +26,9 @@ class Size extends Model
     {
         return $this->belongsTo(ChildCategory::class);
     }
+
+    public function variations()
+    {
+        return $this->hasMany(Variation::class,);
+    }
 }

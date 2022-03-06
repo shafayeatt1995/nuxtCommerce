@@ -98,7 +98,7 @@ class BrandController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -122,7 +122,7 @@ class BrandController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $brands = Brand::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->paginate(500);
         return response()->json(compact('brands'));

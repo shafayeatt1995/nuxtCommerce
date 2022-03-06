@@ -83,7 +83,7 @@ class CityController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -104,7 +104,7 @@ class CityController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $cities = City::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('country', 'state')->latest()->paginate(500);
         return response()->json(compact('cities'));

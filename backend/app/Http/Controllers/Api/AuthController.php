@@ -35,7 +35,7 @@ class AuthController extends Controller
 		$credentials = $request->only('email', 'password');
 
 		if ($token = auth('api')->attempt($credentials)) {
-			$role = User::where("email", $request->email)->first()->role_id;
+			$role = User::where('email', $request->email)->first()->role_id;
 			if ($role === 3) {
 				return response()->json(['error' => 'Unauthorized'], 401);
 			} else {

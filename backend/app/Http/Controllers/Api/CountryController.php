@@ -71,7 +71,7 @@ class CountryController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -92,7 +92,7 @@ class CountryController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $countries = Country::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->latest()->paginate(500);
         return response()->json(compact('countries'));

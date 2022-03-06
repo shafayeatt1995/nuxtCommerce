@@ -11,4 +11,9 @@ class Material extends Model
 
     protected $fillable = ['name', 'status'];
     protected $casts = ['status' => 'boolean'];
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'material_product');
+    }
 }

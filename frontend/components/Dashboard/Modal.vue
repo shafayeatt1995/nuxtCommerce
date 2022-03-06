@@ -1,9 +1,9 @@
 <template>
 	<div class="modal fade show" style="display: block; padding-right: 17px;">
-		<div class="modal-dialog" role="document">
+		<div class="modal-dialog" :class="customClass" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Modal title</h5>
+					<h5 class="modal-title">{{title}}</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="closeModal">
 						<span aria-hidden="true">×</span>
 					</button>
@@ -20,6 +20,10 @@
 </template>
 <script>
 	export default {
+		props: {
+			title: "",
+			customClass: "",
+		},
 		methods: {
 			closeModal() {
 				this.$store.dispatch("dashboardModal", false);

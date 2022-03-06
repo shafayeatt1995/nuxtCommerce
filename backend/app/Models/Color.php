@@ -11,4 +11,9 @@ class Color extends Model
 
     protected $fillable = ['name', 'code', 'status'];
     protected $casts = ['status' => 'boolean'];
+
+    public function variations()
+    {
+        return $this->hasMany(Variation::class,);
+    }
 }

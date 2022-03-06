@@ -83,7 +83,7 @@ class SubCategoryController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -104,7 +104,7 @@ class SubCategoryController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $categories = SubCategory::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category')->latest()->paginate(500);
         return response()->json(compact('categories'));

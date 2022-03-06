@@ -95,6 +95,9 @@
 
 					this.$axios.post("create-brand", formData, config).then(
 						(response) => {
+							this.$router.push(
+								this.localePath("dashboard-admin-brand")
+							);
 							$nuxt.$emit("success", response.data);
 							this.click = true;
 						},

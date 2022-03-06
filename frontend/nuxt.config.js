@@ -28,8 +28,10 @@ export default {
 		'./plugins/mixin.js',
 		"./plugins/pagination.js",
 		"./plugins/filter.js",
+		"./plugins/tooltip.js",
 		{ src: './plugins/toast.js', ssr: false },
 		{ src: './plugins/sweetAlert.js', ssr: false },
+		{ src: './plugins/ckEditor.js', ssr: false },
 	],
 
 	components: true,

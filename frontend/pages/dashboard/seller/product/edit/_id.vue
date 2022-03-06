@@ -1,18 +1,416 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Edit Category</h1>
+			<h1>Edit Product</h1>
 		</div>
 
 		<div class="section-body">
-			<form class="row" @submit.prevent="submit">
+			<form class="row" @submit.prevent="submit" enctype="multipart/form-data">
 				<div class="col-lg-12">
 					<div class="bg-white p-3 min-h100 rounded card-primary">
 						<h3 class="text-center">General Information</h3>
+						<div class="image-form mt-3">
+							<div class="image-frame grid">
+								<div class="select-image" v-for="(image, key) in oldImages" :key="`old-image-${key}`">
+									<img :src="`${url + image.image}`" class="img-fluid max-h250" alt="logo">
+									<span class="pointer" v-tooltip.top-center="'Click to remove'" @click="removeImage(key, 'old')">
+										<i>
+											<icon :icon="['fas', 'times']"></icon>
+										</i>
+									</span>
+								</div>
+								<div class="select-image" v-for="(image, key) in newImages" :key="`new-image-${key}`">
+									<img :src="image" class="img-fluid max-h250" alt="logo">
+									<span class="pointer" v-tooltip.top-center="'Click to remove'" @click="removeImage(key, 'new')">
+										<i>
+											<icon :icon="['fas', 'times']"></icon>
+										</i>
+									</span>
+								</div>
+							</div>
+							<label :for="form.image.length < 10 ? 'logo' : ''" class="image-select">
+								<i>
+									<icon :icon="['fas', 'cloud-upload-alt']"></icon>
+								</i>
+								Select Images
+							</label>
+							<input type="file" class="form-control" id="logo" accept="image/*" @change="image($event)" multiple>
+							<p class="invalid-feedback" v-if="errors.image">{{errors.image[0]}}</p>
+						</div>
 						<div class="form-group">
-							<label for="name">Category Name</label>
-							<input type="text" class="form-control" id="name" v-model="form.name">
+							<label for="name">Product Name</label>
+							<input type="text" class="form-control" id="name" v-model="form.name" required>
 							<p class="invalid-feedback" v-if="errors.name">{{errors.name[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label for="category">Select category</label>
+							<div class="row">
+								<div class="col-lg-4">
+									<select class="form-control my-2" id="category" v-model="form.category_id" @change="form.category_id ? changeCategory() : ''" required>
+										<option value="">Select a category</option>
+										<option :value="category.id" v-for="category in categories" :key="category.id">{{category.name}}</option>
+									</select>
+									<p class="invalid-feedback" v-if="errors.category_id">{{errors.category_id[0]}}</p>
+								</div>
+								<div class="col-lg-4">
+									<select class="form-control my-2" v-model="form.sub_category_id" :disabled="form.category_id && subCategories.length < 1" @change="form.sub_category_id ? changeSubCategory() : ''" required>
+										<option value="">Select a sub category</option>
+										<option :value="sub.id" v-for="sub in subCategories" :key="sub.id">{{sub.name}}</option>
+									</select>
+									<p class="invalid-feedback" v-if="errors.sub_category_id">{{errors.sub_category_id[0]}}</p>
+								</div>
+								<div class="col-lg-4">
+									<select class="form-control my-2" v-model="form.child_category_id" :disabled="form.category_id && form.sub_category_id && childCategories.length < 1" required>
+										<option value="">Select a child category</option>
+										<option :value="child.id" v-for="child in childCategories" :key="child.id">{{child.name}}</option>
+									</select>
+									<p class="invalid-feedback" v-if="errors.child_category_id">{{errors.child_category_id[0]}}</p>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label>
+								Select Brand
+								<i class="pointer" @click="request.brand = !request.brand">
+									<icon :icon="['fas', 'question']"></icon>
+								</i>
+								<transition name="fade" mode="out-in">
+									<nuxt-link :to="localePath('dashboard-seller-request-brand')" class="float-info" v-if="request.brand">Request for new Brand</nuxt-link>
+								</transition>
+							</label>
+							<select class="form-control my-2" v-model="form.brand_id" required>
+								<option value="">Select a brand</option>
+								<option :value="brand.id" v-for="brand in brands" :key="brand.id">{{brand.name}}</option>
+							</select>
+							<p class="invalid-feedback" v-if="errors.brand_id">{{errors.brand_id[0]}}</p>
+						</div>
+						<hr>
+						<h3 class="text-center">Product Info</h3>
+						<div class="form-group">
+							<label for="feature">
+								Product Feature
+							</label>
+							<ul v-if="form.features.length !== 0">
+								<li v-for="(feature, key) in form.features" :key="`feature-${key}`">
+									{{feature}}
+									<span class="pointer ml-2" @click="removeFeature(key)"><i>
+											<icon :icon="['fas', 'times']"></icon>
+										</i></span>
+								</li>
+							</ul>
+							<form class="d-flex grid-gap-5" @submit.prevent="addFeature">
+								<input type="text" class="form-control" id="feature" v-model="feature" required>
+								<button type="submit" class="btn btn-primary">Add Feature</button>
+							</form>
+							<p class="invalid-feedback" v-if="errors.features">{{errors.features[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label>
+								Product Specifications
+							</label>
+							<ul v-if="form.specifications.length !== 0">
+								<li v-for="(specification, key) in form.specifications" :key="`specification-${key}`">
+									{{specification.title}}
+									<i>
+										<icon :icon="['fas', 'arrow-right']"></icon>
+									</i>
+									{{specification.name}}
+									<span class="pointer ml-2" @click="removeSpecification(key)"><i>
+											<icon :icon="['fas', 'times']"></icon>
+										</i></span>
+								</li>
+							</ul>
+							<form class="d-flex grid-gap-5" @submit.prevent="addSpecification">
+								<input type="text" class="form-control" v-model="specificationTitle" placeholder="Specification Title" required>
+								<input type="text" class="form-control" v-model="specificationName" placeholder="Specification Name" required>
+								<button type="submit" class="btn btn-primary">Add Feature</button>
+							</form>
+							<p class="invalid-feedback" v-if="errors.features">{{errors.features[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label for="item">
+								Which item will the customer get
+							</label>
+							<ul v-if="form.items.length !== 0">
+								<li v-for="(item, key) in form.items" :key="`item-${key}`">
+									{{item}}
+									<span class="pointer ml-2" @click="removeItem(key)"><i>
+											<icon :icon="['fas', 'times']"></icon>
+										</i></span>
+								</li>
+							</ul>
+							<form class="d-flex grid-gap-5" @submit.prevent="addItem">
+								<input type="text" class="form-control" id="item" v-model="item" required>
+								<button type="submit" class="btn btn-primary">Add Item</button>
+							</form>
+							<p class="invalid-feedback" v-if="errors.items">{{errors.items[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label>
+								Product Materials
+							</label>
+							<div class="form-check checkbox-grid">
+								<div v-for="(material, key) in materials" :key="`material-${key}`">
+									<input class="form-check-input" type="checkbox" :id="`material${key}`" :value="material.id" v-model="form.materials">
+									<label class="form-check-label ml-1" :for="`material${key}`">{{material.name}}</label>
+								</div>
+							</div>
+							<p class="invalid-feedback" v-if="errors.materials">{{errors.materials[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label>
+								Product Weight (KG)
+							</label>
+							<input type="number" step="0.01" class="form-control" v-model="form.weight" required>
+							<p class="invalid-feedback" v-if="errors.weight">{{errors.weight[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label>
+								Product Description
+							</label>
+							<ckeditor v-model="form.description"></ckeditor>
+							<p class="invalid-feedback" v-if="errors.description">{{errors.description[0]}}</p>
+						</div>
+						<hr>
+						<!-- Product Variation start -->
+						<h3 class="text-center">Product Variation</h3>
+						<table class="table table-striped text-center table-responsive-md">
+							<thead>
+								<tr>
+									<th scope="col">Color</th>
+									<th scope="col">Size</th>
+									<th scope="col">Price</th>
+									<th scope="col">Discount</th>
+									<th scope="col">invertory</th>
+									<th scope="col">Action</th>
+								</tr>
+							</thead>
+							<tbody class="text-center">
+								<tr v-for="(variation, key) in oldVariations" :key="`oldVariation${key}`">
+									<td>
+										{{colors.find(color => color.id === variation.color_id).name}}
+										<span class="color-bar" :style="`background: ${colors.find(color => color.id === variation.color_id).code}`"></span>
+									</td>
+									<td>{{sizes.find(size => size.id === variation.size_id).name}}</td>
+									<td>{{defaultCurrencyIcon}} {{variation.price}}</td>
+									<td>
+										<div v-if="variation.special_price !== null">
+											<p><b>Price:</b> {{variation.special_price}}</p>
+											<p><b>Date:</b> {{variation.start_date | normalDate}}
+												<i>
+													<icon :icon="['fas', 'arrow-right']"></icon>
+												</i>
+												{{variation.end_date | normalDate}}
+											</p>
+										</div>
+										<p v-else>
+											No Discount
+										</p>
+									</td>
+									<td>
+										<div v-if="variation.quantity !== null">
+											<p>SKU: {{variation.sku}}</p>
+											<p>Qty: {{variation.quantity}}</p>
+										</div>
+										<p v-else>
+											No Inventory
+										</p>
+									</td>
+									<td>
+										<button type="button" class="btn btn-icon btn-primary my-2" @click="editVariation(variation, key)">
+											<i>
+												<icon :icon="['fas', 'edit']"></icon>
+											</i>
+										</button>
+										<button type="button" class="btn btn-icon btn-danger my-2" @click="removeVariation(key, 'old')">
+											<i>
+												<icon :icon="['fas', 'trash-alt']"></icon>
+											</i>
+										</button>
+									</td>
+								</tr>
+								<tr v-for="(variation, key) in form.newVariations" :key="key">
+									<td>
+										{{colors.find(color => color.id === variation.color_id).name}}
+										<span class="color-bar" :style="`background: ${colors.find(color => color.id === variation.color_id).code}`"></span>
+									</td>
+									<td>{{sizes.find(size => size.id === variation.size_id).name}}</td>
+									<td>{{defaultCurrencyIcon}} {{variation.price}}</td>
+									<td>
+										<div v-if="variation.special_price !== null">
+											<p><b>Price:</b> {{variation.special_price}}</p>
+											<p><b>Date:</b> {{variation.start_date | normalDate}}
+												<i>
+													<icon :icon="['fas', 'arrow-right']"></icon>
+												</i>
+												{{variation.end_date | normalDate}}
+											</p>
+										</div>
+										<p v-else>
+											No Discount
+										</p>
+									</td>
+									<td>
+										<div v-if="variation.quantity !== null">
+											<p>SKU: {{variation.sku}}</p>
+											<p>Qty: {{variation.quantity}}</p>
+										</div>
+										<p v-else>
+											No Inventory
+										</p>
+									</td>
+									<td>
+										<button type="button" class="btn btn-icon btn-primary my-2" @click="editVariation(variation, key)">
+											<i>
+												<icon :icon="['fas', 'edit']"></icon>
+											</i>
+										</button>
+										<button type="button" class="btn btn-icon btn-danger my-2" @click="removeVariation(key, 'new')">
+											<i>
+												<icon :icon="['fas', 'trash-alt']"></icon>
+											</i>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<form class="row" @submit.prevent="addVariation" enctype="multipart/form-data">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>
+										Select Size
+										<i class="pointer" @click="request.size = !request.size">
+											<icon :icon="['fas', 'question']"></icon>
+										</i>
+										<transition name="fade" mode="out-in">
+											<nuxt-link :to="localePath('dashboard-seller-request-brand')" class="float-info" v-if="request.size">Request for new size</nuxt-link>
+										</transition>
+									</label>
+									<select class="form-control my-2" v-model="variation.size_id" required>
+										<option value="">Select a Size</option>
+										<option :value="size.id" v-for="size in sizes" :key="size.id">
+											{{size.name}}
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>
+										Select Color
+										<i class="pointer" @click="request.color = !request.color">
+											<icon :icon="['fas', 'question']"></icon>
+										</i>
+										<transition name="fade" mode="out-in">
+											<nuxt-link :to="localePath('dashboard-seller-request-brand')" class="float-info" v-if="request.color">Request for new color</nuxt-link>
+										</transition>
+									</label>
+									<select class="form-control my-2" v-model="variation.color_id" required>
+										<option value="">Select a color</option>
+										<option :value="color.id" v-for="color in colors" :key="color.id" :style="`background: ${color.code}`">
+											{{color.name}}
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>
+										Product Price
+									</label>
+									<input type="number" step="0.01" class="form-control" v-model="variation.price" required>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="special-price">Discount</label>
+									<select class="form-control" id="special-price" v-model="variation.discount">
+										<option :value="true">Yes</option>
+										<option :value="false">No</option>
+									</select>
+								</div>
+							</div>
+							<transition name="slide" mode="out-in">
+								<div class="col-md-6" v-if="variation.discount">
+									<div class="form-group">
+										<label for="special-price">Special Price</label>
+										<input type="number" step="0.01" class="form-control" v-model="variation.special_price" :required="variation.discount">
+									</div>
+								</div>
+							</transition>
+							<transition name="slide" mode="out-in">
+								<div class="col-md-6" v-if="variation.discount">
+									<div class="form-group">
+										<label for="special-price">Special Price Date</label>
+										<date-picker v-model="variation.date" type="date" range value-type="YYYY-MM-DD" placeholder="Select date range" :require="variation.discount"></date-picker>
+									</div>
+								</div>
+							</transition>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="special-price">Inventory</label>
+									<select class="form-control" id="special-price" v-model="variation.inventory">
+										<option :value="true">Yes</option>
+										<option :value="false">No</option>
+									</select>
+								</div>
+							</div>
+							<transition name="slide" mode="out-in">
+								<div class="col-md-6" v-if="variation.inventory">
+									<div class="form-group">
+										<label>
+											Product Quantity
+										</label>
+										<input type="number" class="form-control" v-model="variation.quantity" :required="variation.inventory">
+									</div>
+								</div>
+							</transition>
+							<transition name="slide" mode="out-in">
+								<div class="col-md-6" v-if="variation.inventory">
+									<div class="form-group">
+										<label>
+											Product SKU
+										</label>
+										<input type="text" class="form-control" v-model="variation.sku" :required="variation.inventory">
+									</div>
+								</div>
+							</transition>
+							<div class="col-md-12 d-flex flex-column w-100 justify-content-end">
+								<button type="submit" class="btn btn-primary">Add Veriation</button>
+								<p class="invalid-feedback" v-if="errors.variations">{{errors.variations[0]}}</p>
+							</div>
+						</form>
+						<hr>
+						<!-- Product Variation end -->
+
+						<h3 class="text-center">SEO</h3>
+						<div class="form-group">
+							<label for="tag">
+								Search Tag
+							</label>
+							<ul class="d-flex grid-gap-5 p-0" v-if="form.tags.length !== 0">
+								<li class="badge badge-primary" v-for="(tag, key) in form.tags" :key="`tag-${key}`">
+									{{tag}}
+									<span class="pointer ml-2" @click="removeTag(key)"><i>
+											<icon :icon="['fas', 'times']"></icon>
+										</i></span>
+								</li>
+							</ul>
+							<form class="d-flex grid-gap-5" @submit.prevent="addTag">
+								<div class="position-relative w-100">
+									<input type="text" class="form-control" id="tag" v-model="tag" :maxlength="maxCharacter" required>
+									<span class="tagCharecter">{{tag.length}}/{{maxCharacter - tag.length}}</span>
+								</div>
+								<button type="submit" class="btn btn-primary">Add Tag</button>
+							</form>
+							<p class="invalid-feedback" v-if="errors.tags">{{errors.tags[0]}}</p>
+						</div>
+						<div class="form-group">
+							<label for="tag">
+								Meta Description
+							</label>
+							<textarea class="form-control" id="meta" v-model="form.meta" required></textarea>
+							<p class="invalid-feedback" v-if="errors.meta">{{errors.meta[0]}}</p>
 						</div>
 						<div class="form-group">
 							<label for="status">Status</label>
@@ -25,7 +423,7 @@
 						<button type="submit" class="btn btn-primary">
 							<transition name="fade" mode="out-in">
 								<Spiner v-if="loading" />
-								<span v-else>Update Category</span>
+								<span v-else>Update product</span>
 							</transition>
 						</button>
 					</div>
@@ -35,12 +433,16 @@
 	</div>
 </template>
 <script>
+	import DatePicker from "vue2-datepicker";
+	import "vue2-datepicker/index.css";
+
 	export default {
-		name: "edit-category",
+		name: "edit-product",
 		middleware: "seller",
+		components: { DatePicker },
 		head() {
 			return {
-				title: `Edit Category - ${this.appName}`,
+				title: `Edit Product - ${this.appName}`,
 			};
 		},
 
@@ -48,8 +450,59 @@
 			return {
 				form: {
 					name: "",
+					brand_id: "",
+					category_id: "",
+					sub_category_id: "",
+					child_category_id: "",
+					features: [],
+					specifications: [],
+					items: [],
+					materials: [],
+					description: "",
+					variations: [],
+					newVariations: [],
+					deleteVariations: [],
+					image: [],
+					weight: "",
+					tags: [],
+					meta: "",
 					status: true,
 				},
+				request: {
+					brand: false,
+					color: false,
+				},
+				variation: {
+					color_id: "",
+					size_id: "",
+					price: "",
+					discount: false,
+					special_price: "",
+					date: [],
+					inventory: false,
+					quantity: "",
+					sku: "",
+				},
+
+				brands: [],
+				categories: [],
+				subCategories: [],
+				childCategories: [],
+				materials: [],
+				colors: [],
+				sizes: [],
+				feature: "",
+				specificationTitle: "",
+				specificationName: "",
+				item: "",
+				tag: "",
+				maxCharacter: 25,
+				oldVariations: [],
+				images: [],
+				oldImages: [],
+				uploadImages: [],
+				newImages: [],
+				deleteImages: [],
 				errors: {},
 				click: true,
 				loading: false,
@@ -57,12 +510,69 @@
 		},
 
 		methods: {
-			// Get category
-			editCategory() {
-				this.$axios.get(`edit-category/${this.$route.params.id}`).then(
+			//Get Category List
+			editProductInfo() {
+				this.$axios.get(`edit-product-info/${this.$route.params.id}`).then(
 					(response) => {
-						this.form.name = response.data.category.name;
-						this.form.status = response.data.category.status;
+						this.form.name = response.data.product.name;
+						this.form.brand_id = response.data.product.brand_id;
+						this.form.category_id = response.data.product.category_id;
+						this.form.sub_category_id =
+							response.data.product.sub_category_id;
+						this.form.child_category_id =
+							response.data.product.child_category_id;
+						this.form.features = JSON.parse(
+							response.data.product.features
+						);
+						this.form.specifications = JSON.parse(
+							response.data.product.specifications
+						);
+						this.form.items = JSON.parse(response.data.product.items);
+						this.form.description = response.data.product.description;
+						this.form.items = JSON.parse(response.data.product.items);
+						this.form.weight = response.data.product.weight;
+						this.form.tags = JSON.parse(response.data.product.tags);
+						this.form.meta = response.data.product.meta;
+						this.form.status = response.data.product.status;
+						this.form.materials = response.data.product.materials.map(
+							(material) => material.id
+						);
+						this.form.variations = response.data.product.variations.map(
+							(variation, key) => {
+								return key;
+							}
+						);
+						this.oldVariations = response.data.product.variations.map(
+							(variation) => {
+								return {
+									id: variation.id,
+									color_id: variation.color_id,
+									size_id: variation.size_id,
+									price: variation.price,
+									discount: variation.discount,
+									special_price: variation.special_price,
+									start_date: variation.start_date,
+									end_date: variation.end_date,
+									inventory: variation.inventory,
+									quantity: variation.quantity,
+									sku: variation.sku,
+								};
+							}
+						);
+						this.categories = response.data.categories;
+						this.subCategories = response.data.subCategories;
+						this.childCategories = response.data.childCategories;
+						this.brands = response.data.brands;
+						this.materials = response.data.materials;
+						this.colors = response.data.colors;
+						this.sizes = response.data.sizes;
+
+						this.oldImages = response.data.product.product_images;
+						this.form.image = response.data.product.product_images.map(
+							(image, key) => {
+								return key;
+							}
+						);
 					},
 					(error) => {
 						$nuxt.$emit("error", error);
@@ -70,19 +580,259 @@
 				);
 			},
 
+			//Change Category
+			changeCategory() {
+				this.form.sub_category_id = "";
+				this.$axios.get(`sub-category-list/${this.form.category_id}`).then(
+					(response) => {
+						this.subCategories = response.data.subCategories;
+					},
+					(error) => {
+						$nuxt.$emit("error", error);
+					}
+				);
+			},
+
+			//Change Sub Category
+			changeSubCategory() {
+				this.form.child_category_id = "";
+				this.$axios
+					.get(`product-child-category-list/${this.form.sub_category_id}`)
+					.then(
+						(response) => {
+							this.childCategories = response.data.childCategories;
+							this.sizes = response.data.sizes;
+						},
+						(error) => {
+							$nuxt.$emit("error", error);
+						}
+					);
+			},
+
+			//Add Feature
+			addFeature() {
+				if (this.form.features.length < 5) {
+					if (this.feature) {
+						this.form.features.push(this.feature);
+						this.feature = "";
+					}
+				} else {
+					this.$nuxt.$emit(
+						"customError",
+						"You can add maximum 5 features"
+					);
+				}
+			},
+
+			// Remove Feature
+			removeFeature(key) {
+				this.form.features.splice(key, 1);
+			},
+
+			//Add Specification
+			addSpecification() {
+				this.form.specifications.push({
+					title: this.specificationTitle,
+					name: this.specificationName,
+				});
+				this.specificationTitle = "";
+				this.specificationName = "";
+			},
+
+			// Remove Specification
+			removeSpecification(key) {
+				this.form.specifications.splice(key, 1);
+			},
+
+			//Add Item
+			addItem() {
+				if (this.item) {
+					this.form.items.push(this.item);
+					this.item = "";
+				}
+			},
+
+			// Remove Item
+			removeItem(key) {
+				this.form.items.splice(key, 1);
+			},
+
+			//Add Tag
+			addTag() {
+				if (this.form.tags.length < 10) {
+					if (this.tag) {
+						this.form.tags.push(this.tag);
+						this.tag = "";
+					}
+				} else {
+					this.$nuxt.$emit("customError", "You can add maximum 10 tags");
+				}
+			},
+
+			// Remove Tag
+			removeTag(key) {
+				this.form.tags.splice(key, 1);
+			},
+
+			// Add Product Image
+			image(event) {
+				if (event.target.files.length > 0) {
+					for (let file of Object.entries(event.target.files)) {
+						let reader = new FileReader();
+						if (file[1].size < 2097153) {
+							if (this.form.image.length < 10) {
+								reader.onloadend = () => {
+									this.newImages.push(reader.result);
+								};
+								reader.readAsDataURL(file[1]);
+								this.uploadImages.push(file[1]);
+								this.form.image.push(this.form.image.length + 1);
+							} else {
+								$nuxt.$emit(
+									"customError",
+									"You Can Upload Maximum 10 Images"
+								);
+							}
+						} else {
+							$nuxt.$emit("customError", "Maximum Image Size 2 MB");
+						}
+					}
+				}
+			},
+
+			//Remove Image
+			removeImage(key, type) {
+				if (type === "old") {
+					let id = this.oldImages.find((image, index) => {
+						return key === index;
+					}).id;
+					this.deleteImages.push(id);
+					this.oldImages.splice(key, 1);
+					this.form.image.shift();
+				} else {
+					this.uploadImages.splice(key, 1);
+					this.newImages.splice(key, 1);
+					this.form.image.shift();
+				}
+			},
+
+			// Add veriation
+			addVariation() {
+				let data = {
+					color_id: this.variation.color_id,
+					size_id: this.variation.size_id,
+					price: this.variation.price,
+					discount: this.variation.discount,
+					special_price: this.variation.discount
+						? this.variation.special_price
+						: null,
+					start_date: this.variation.discount
+						? this.variation.date.length === 2
+							? this.variation.date[0]
+							: new Date()
+						: null,
+					end_date: this.variation.discount
+						? this.variation.date.length === 2
+							? this.variation.date[1]
+							: new Date()
+						: null,
+					inventory: this.variation.inventory,
+					quantity: this.variation.inventory
+						? this.variation.quantity
+						: null,
+					sku: this.variation.inventory ? this.variation.sku : null,
+				};
+				this.form.newVariations.push(data);
+				this.form.variations.push(this.form.variations.length + 1);
+
+				this.variation.color_id = "";
+				this.variation.size_id = "";
+				this.variation.price = "";
+				this.variation.discount = false;
+				this.variation.special_price = "";
+				this.variation.date = [];
+				this.variation.inventory = false;
+				this.variation.quantity = "";
+				this.variation.sku = "";
+			},
+
+			// Edit Veriation
+			editVariation(variation, key) {
+				this.variation.color_id = variation.color_id;
+				this.variation.size_id = variation.size_id;
+				this.variation.price = variation.price;
+				this.variation.discount =
+					variation.special_price !== null ? true : false;
+				this.variation.special_price = variation.special_price || "";
+				this.variation.date =
+					variation.special_price !== null
+						? [variation.start_date, variation.end_date]
+						: [];
+				this.variation.inventory =
+					variation.quantity !== null ? true : false;
+				this.variation.quantity = variation.quantity || "";
+				this.variation.sku = variation.sku || "";
+
+				this.form.variations.splice(key, 1);
+			},
+
+			// Remove Variation
+			removeVariation(key, type) {
+				if (type === "old") {
+					let id = this.oldVariations.find((variations, index) => {
+						return key === index;
+					}).id;
+					this.form.deleteVariations.push(id);
+					this.oldVariations.splice(key, 1);
+					this.form.variations.shift();
+				} else {
+					this.form.newVariations.splice(key, 1);
+					this.form.variations.shift();
+				}
+			},
+
 			//Submit Form
 			submit() {
 				if (this.click) {
-					this.click = false;
+					// this.click = false;
+					this.errors = {};
+
 					this.$axios
-						.post(`update-category/${this.$route.params.id}`, this.form)
+						.post(`update-product/${this.$route.params.id}`, this.form)
 						.then(
 							(response) => {
-								$nuxt.$emit("success", response.data);
-								this.click = true;
-								this.$router.push(
-									this.localePath("dashboard-admin-category")
-								);
+								const config = {
+									headers: {
+										"content-type": "multipart/form-data",
+									},
+								};
+								let formData = new FormData();
+								this.uploadImages.forEach((image) => {
+									formData.append("uploadImages[]", image);
+								});
+								this.deleteImages.forEach((image) => {
+									formData.append("deleteImages[]", image);
+								});
+								this.$axios
+									.post(
+										`update-product-image/${response.data.slug}`,
+										formData,
+										config
+									)
+									.then(
+										(res) => {
+											$nuxt.$emit("success", res.data);
+											this.click = true;
+											// this.$router.push(
+											// 	this.localePath(
+											// 		"dashboard-seller-product"
+											// 	)
+											// );
+										},
+										() => {
+											this.click = true;
+										}
+									);
 							},
 							(error) => {
 								this.errors = error.response.data.errors;
@@ -94,7 +844,7 @@
 		},
 
 		created() {
-			this.editCategory();
+			this.editProductInfo();
 		},
 	};
 </script>

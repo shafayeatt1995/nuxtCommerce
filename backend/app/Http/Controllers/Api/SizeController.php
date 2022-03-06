@@ -77,7 +77,7 @@ class SizeController extends Controller
         $this->authorize('admin');
         $request->validate(
             [
-                "idList" => "required|array|min:1"
+                'idList' => 'required|array|min:1'
             ],
             [
                 'idList.required' => 'Please select an item',
@@ -98,7 +98,7 @@ class SizeController extends Controller
     {
         $this->authorize('admin');
         $request->validate([
-            "collum" => "required"
+            'collum' => 'required'
         ]);
         $sizes = Size::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('category', 'subCategory')->latest()->paginate(500);
         return response()->json(compact('sizes'));
