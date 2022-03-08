@@ -178,8 +178,16 @@ Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'],
     Route::post('update-product/{id}', 'ProductController@updateProduct');
     Route::post('update-product-image/{slug}', 'ProductController@updateProductImage');
     Route::post('status-product/{id}', 'ProductController@statusProduct');
-    Route::post('search-product', 'ProductController@searchProduct');
     Route::post('delete-product/{id}', 'ProductController@deleteProduct');
+    Route::post('approve-product/{id}', 'ProductController@approveProduct');
+    Route::post('suspend-product/{id}', 'ProductController@suspendProduct');
+    Route::get('product-all', 'ProductController@productAll');
+    Route::get('product-pending', 'ProductController@productPending');
+    Route::get('product-suspend', 'ProductController@productSuspend');
+    Route::post('search-product', 'ProductController@searchProduct');
+    Route::post('search-product-all', 'ProductController@searchProductAll');
+    Route::post('search-product-pending', 'ProductController@searchProductPending');
+    Route::post('search-product-suspend', 'ProductController@searchProductSuspend');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {

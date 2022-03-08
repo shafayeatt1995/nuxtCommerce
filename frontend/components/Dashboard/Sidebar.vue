@@ -195,7 +195,13 @@
 					<transition name="slide" mode="out-in">
 						<ul class="sidebar-dropdown-menu" v-if="product || route.substring(17, 24) === 'product'">
 							<li>
+								<nuxt-link :to="localePath('dashboard-admin-product')">All Product</nuxt-link>
+							</li>
+							<li>
 								<nuxt-link :to="localePath('dashboard-admin-product-pending')">Pendiing Product</nuxt-link>
+							</li>
+							<li>
+								<nuxt-link :to="localePath('dashboard-admin-product-suspend')">Suspend Product</nuxt-link>
 							</li>
 						</ul>
 					</transition>

@@ -55,16 +55,16 @@
 								<button class="badge badge-success color-black" type="button" @click="changeStatus(store.id)" v-else>Active</button>
 							</td>
 							<td>
-								<nuxt-link :to="localePath({name: 'dashboard-admin-store-edit-id', params: {id: store.id }})" class="btn btn-icon btn-primary my-2" @click="editStore(store.id)">
-									<i>
-										<icon :icon="['fas', 'edit']"></icon>
-									</i>
-								</nuxt-link>
 								<button class="btn btn-icon btn-success my-2" @click="viewStore(store)">
 									<i>
 										<icon :icon="['fas', 'eye']"></icon>
 									</i>
 								</button>
+								<nuxt-link :to="localePath({name: 'dashboard-admin-store-edit-id', params: {id: store.id }})" class="btn btn-icon btn-primary my-2" @click="editStore(store.id)">
+									<i>
+										<icon :icon="['fas', 'edit']"></icon>
+									</i>
+								</nuxt-link>
 							</td>
 						</tr>
 					</tbody>
@@ -78,9 +78,9 @@
 
 			</div>
 		</div>
-		<transition name="fade" mode="out-in">
+		<transition name="fadeDelay" mode="out-in">
 			<DashboardModal v-if="dashboardModal === 'store'" title="Store Details">
-				<table class="table table-striped text-center table-responsive-md">
+				<table class="table table-striped text-center table-responsive-md" slot="body">
 					<thead>
 						<tr>
 							<th scope="col">Name</th>

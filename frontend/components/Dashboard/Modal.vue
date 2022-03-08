@@ -9,9 +9,10 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<slot></slot>
+					<slot name="body"></slot>
 				</div>
 				<div class="modal-footer bg-whitesmoke br">
+					<slot name="footer-btn"></slot>
 					<button type="button" class="btn btn-danger" @click="closeModal">Close</button>
 				</div>
 			</div>

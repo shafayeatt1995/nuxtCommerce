@@ -24,7 +24,7 @@ class ProductController extends Controller
     public function index()
     {
         $this->authorize('seller');
-        $products = Product::where('store_id', Auth::user()->store->id)->with('variations.color', 'variations.size', 'productImages', 'category', 'subCategory', 'childCategory', 'brand')->latest()->paginate(20);
+        $products = Product::where('store_id', Auth::user()->store->id)->with('variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->latest()->paginate(20);
         return response()->json(compact('products'));
     }
 
@@ -271,16 +271,6 @@ class ProductController extends Controller
         return response()->json('product status update successfully');
     }
 
-    public function searchProduct(Request $request)
-    {
-        $this->authorize('seller');
-        $request->validate([
-            'collum' => 'required'
-        ]);
-        $products = Product::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->where('store_id', Auth::user()->store->id)->with('variations')->paginate(500);
-        return response()->json(compact('products'));
-    }
-
     public function deleteProduct($id)
     {
         $this->authorize('adminOrSeller');
@@ -295,5 +285,86 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->json('product delete successfully');
+    }
+
+    public function approveProduct($id)
+    {
+        $this->authorize('admin');
+        $product = Product::where('id', $id)->first();
+        $product->pending = false;
+        $product->save();
+
+        return response()->json('Product successfully Approved');
+    }
+
+    public function suspendProduct($id)
+    {
+        $this->authorize('admin');
+        $product = Product::where('id', $id)->first();
+        $product->suspend = !$product->suspend;
+        $product->save();
+
+        return response()->json($product->suspend ? 'Product successfully suspended' : 'Product successfully remove from suspend list');
+    }
+
+    public function productAll()
+    {
+        $this->authorize('admin');
+        $products = Product::with('store', 'variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->latest()->paginate(20);
+        return response()->json(compact("products"));
+    }
+
+    public function productPending()
+    {
+        $this->authorize('admin');
+        $products = Product::where('pending', true)->where('suspend', false)->with('store', 'variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->latest()->paginate(20);
+        return response()->json(compact("products"));
+    }
+
+    public function productSuspend()
+    {
+        $this->authorize('admin');
+        $products = Product::where('suspend', true)->with('store', 'variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->latest()->paginate(20);
+        return response()->json(compact("products"));
+    }
+
+    public function searchProduct(Request $request)
+    {
+        $this->authorize('seller');
+        $request->validate([
+            'collum' => 'required'
+        ]);
+        $products = Product::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->where('store_id', Auth::user()->store->id)->with('variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->paginate(50);
+        return response()->json(compact('products'));
+    }
+
+    public function searchProductAll(Request $request)
+    {
+        $this->authorize('admin');
+        $request->validate([
+            'collum' => 'required'
+        ]);
+        $products = Product::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->with('variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->paginate(50);
+        return response()->json(compact('products'));
+    }
+
+    public function searchProductPending(Request $request)
+    {
+        $this->authorize('admin');
+        $request->validate([
+            'collum' => 'required'
+        ]);
+        $products = Product::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->where('pending', true)->where('suspend', false)->with('store', 'variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->paginate(50);
+        return response()->json(compact('products'));
+    }
+
+    public function searchProductSuspend(Request $request)
+    {
+        $this->authorize('admin');
+        $request->validate([
+            'collum' => 'required'
+        ]);
+        $products = Product::where($request->collum, 'LIKE', '%' . $request->keyword . '%')->where('suspend', true)->with('store', 'variations.color', 'variations.size', 'productImages', 'category', 'subCategory.commission', 'childCategory', 'brand')->paginate(50);
+        return response()->json(compact('products'));
     }
 }

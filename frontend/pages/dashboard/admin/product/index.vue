@@ -1,13 +1,17 @@
 <template>
 	<div>
 		<div class="section-header">
-			<h1>Products</h1>
-			<nuxt-link :to="localePath('dashboard-seller-product-create')" class="btn btn-primary">Create Product</nuxt-link>
+			<h1>All Products</h1>
 		</div>
 
 		<div class="section-body">
 			<div class="row bg-white rounded p-3 shadow">
-				<div class="d-flex w-100 justify-content-end flex-lg-row flex-column">
+				<div class="d-flex w-100 justify-content-between flex-lg-row flex-column">
+					<div class="">
+						<button type="button" class="btn btn-primary my-1" @click="typeProduct('all')">All Product</button>
+						<button type="button" class="btn btn-warning my-1" @click="typeProduct('pending')">Pending Product</button>
+						<button type="button" class="btn btn-danger my-1" @click="typeProduct('suspend')">Suspend Product</button>
+					</div>
 					<form class="d-flex mb-3" @submit.prevent="search">
 						<input class="form-control" type="text" placeholder="Search..." v-model="searchOption.keyword" @keyup="instantSearch">
 						<select class="form-control" v-model="searchOption.collum">
@@ -25,7 +29,8 @@
 						<tr>
 							<th scope="col">Name</th>
 							<th scope="col">Price</th>
-							<th scope="col">Discount Price</th>
+							<th scope="col">Discount</th>
+							<th scope="col">Suspend</th>
 							<th scope="col">Pending</th>
 							<th scope="col">Visibility</th>
 							<th scope="col">Create At</th>
@@ -48,32 +53,40 @@
 								{{defaultCurrencyIcon}}{{product.variations.reduce((total, variation)=> Math.max(total, variation.price), 0) | currency}}
 							</td>
 							<td>
-								{{product.variations.some(variation => variation.discount === true) ? 'This product has discount' : 'This product has no discount' }}
+								{{product.variations.some(variation => variation.discount === true) ? 'Yes' : 'No' }}
 							</td>
 							<td>
 								<span class="badge badge-danger" v-if="product.suspend">Suspended</span>
-								<span class="badge badge-warning color-black" v-else-if="product.pending">Pending</span>
-								<span class="badge badge-success color-black" v-else>Approved</span>
+								<span class="badge badge-success color-black" v-else>Active</span>
 							</td>
 							<td>
-								<button class="badge badge-success color-black" type="button" v-if="product.status" @click="changeStatus(product.id)">Active</button>
-								<button class="badge badge-danger" type="button" @click="changeStatus(product.id)" v-else>Hide</button>
+								<span class="badge badge-warning color-black" v-if="product.pending">Pending</span>
+								<span class="badge badge-success color-black" v-else>Active</span>
+							</td>
+							<td>
+								<span class="badge badge-success color-black" v-if="product.status">Active</span>
+								<span class="badge badge-danger" v-else>Hide</span>
 							</td>
 							<td>
 								{{product.created_at | normalDate}}
 							</td>
 							<td>
-								<button class="btn btn-success" type="button" @click="viewProduct(product)">
+								<button class="btn btn-primary" type="button" @click="viewProduct(product)" v-tooltip.top-center="'View Product'">
 									<i>
 										<icon :icon="['fas', 'eye']"></icon>
 									</i>
 								</button>
-								<nuxt-link class="btn btn-primary" :to="localePath({name:'dashboard-seller-product-edit-id', params:{id:product.id}})">
+								<button class="btn btn-success" type="button" @click="approveProduct(product.id)" v-tooltip.top-center="'Approve Product'" v-if="product.pending">
 									<i>
-										<icon :icon="['fas', 'edit']"></icon>
+										<icon :icon="['fas', 'check']"></icon>
 									</i>
-								</nuxt-link>
-								<button class="btn btn-danger" type="button" @click="deleteProduct(product.id)">
+								</button>
+								<button class="btn btn-success" type="button" @click="suspend(product.id)" v-tooltip.top-center="'Change Suspend Status'">
+									<i>
+										<icon :icon="['fas', 'times']"></icon>
+									</i>
+								</button>
+								<button class="btn btn-danger" type="button" @click="deleteProduct(product.id)" v-tooltip.top-center="'Delete Product'">
 									<i>
 										<icon :icon="['fas', 'trash-alt']"></icon>
 									</i>
@@ -109,6 +122,10 @@
 							<tr>
 								<td>Product Name</td>
 								<td>{{productModal.name}}</td>
+							</tr>
+							<tr>
+								<td>Store Name</td>
+								<td>{{productModal.store.name}}</td>
 							</tr>
 							<tr>
 								<td>Category</td>
@@ -276,7 +293,9 @@
 					</table>
 				</div>
 				<div slot="footer-btn">
-
+					<button class="btn btn-success color-black" type="button" @click="removeSuspend(productModal.id)">
+						Remove Suspend
+					</button>
 				</div>
 			</DashboardModal>
 		</transition>
@@ -285,7 +304,7 @@
 <script>
 	export default {
 		name: "all-products",
-		middleware: "seller",
+		middleware: "admin",
 		head() {
 			return {
 				title: `All Products - ${this.appName}`,
@@ -294,6 +313,7 @@
 		data() {
 			return {
 				click: true,
+				productType: "all",
 				products: {},
 				searchOption: {
 					keyword: "",
@@ -306,7 +326,7 @@
 		methods: {
 			//Get Product
 			getProduct() {
-				this.$axios.get("product").then(
+				this.$axios.get(`product-${this.productType}`).then(
 					(response) => {
 						this.products = response.data.products;
 						this.loading = false;
@@ -317,9 +337,86 @@
 				);
 			},
 			getResults(page = 1) {
-				this.$axios.get("product?page=" + page).then((response) => {
-					this.products = response.data.products;
-				});
+				this.$axios
+					.get(`product-${this.productType}?page=${page}`)
+					.then((response) => {
+						this.products = response.data.products;
+					});
+			},
+
+			//Get Type wise product
+			typeProduct(type) {
+				this.productType = type;
+				$nuxt.$emit("triggerAllProduct");
+				this.loading = true;
+			},
+
+			//Approve Product
+			approveProduct(id) {
+				if (this.click) {
+					this.click = false;
+					this.$swal
+						.fire({
+							title: "Are you sure?",
+							text: "You want to approve this product",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#6777ef",
+							cancelButtonColor: "#fc544b",
+							confirmButtonText: "Yes, Approve it!",
+						})
+						.then((result) => {
+							if (result.isConfirmed) {
+								this.$axios.post(`approve-product/${id}`).then(
+									(response) => {
+										$nuxt.$emit("triggerAllProduct");
+										$nuxt.$emit("success", response.data);
+										this.click = true;
+									},
+									(error) => {
+										$nuxt.$emit("error", error);
+										this.click = true;
+									}
+								);
+							} else {
+								this.click = true;
+							}
+						});
+				}
+			},
+
+			//Remove suspend Product
+			suspend(id) {
+				if (this.click) {
+					this.click = false;
+					this.$swal
+						.fire({
+							title: "Are you sure?",
+							text: "You want to change suspend status",
+							icon: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#6777ef",
+							cancelButtonColor: "#fc544b",
+							confirmButtonText: "Yes, Change it!",
+						})
+						.then((result) => {
+							if (result.isConfirmed) {
+								this.$axios.post(`suspend-product/${id}`).then(
+									(response) => {
+										$nuxt.$emit("triggerAllProduct");
+										$nuxt.$emit("success", response.data);
+										this.click = true;
+									},
+									(error) => {
+										$nuxt.$emit("error", error);
+										this.click = true;
+									}
+								);
+							} else {
+								this.click = true;
+							}
+						});
+				}
 			},
 
 			//Confirm Delete
@@ -340,7 +437,7 @@
 							if (result.isConfirmed) {
 								this.$axios.post(`delete-product/${id}`).then(
 									(response) => {
-										$nuxt.$emit("triggerProduct");
+										$nuxt.$emit("triggerAllProduct");
 										$nuxt.$emit("success", response.data);
 										this.click = true;
 									},
@@ -356,30 +453,17 @@
 				}
 			},
 
-			//Search product
+			//Search Pending Product
 			search() {
 				if (this.click) {
 					this.click = false;
 					this.loading = true;
-					this.$axios.post("search-product", this.searchOption).then(
-						(response) => {
-							this.products = response.data.products;
-							this.loading = false;
-							this.click = true;
-						},
-						(error) => {
-							$nuxt.$emit("error", error);
-							this.click = true;
-						}
-					);
-				}
-			},
-			instantSearch() {
-				if (this.click) {
-					this.click = false;
-					this.loading = true;
-					setTimeout(() => {
-						this.$axios.post("search-product", this.searchOption).then(
+					this.$axios
+						.post(
+							`search-product-${this.productType}`,
+							this.searchOption
+						)
+						.then(
 							(response) => {
 								this.products = response.data.products;
 								this.loading = false;
@@ -390,23 +474,30 @@
 								this.click = true;
 							}
 						);
-					}, 500);
 				}
 			},
-
-			changeStatus(id) {
+			instantSearch() {
 				if (this.click) {
 					this.click = false;
-					this.$axios.post(`status-product/${id}`).then(
-						(response) => {
-							$nuxt.$emit("triggerProduct");
-							this.click = true;
-						},
-						(error) => {
-							$nuxt.$emit("error", error);
-							this.click = true;
-						}
-					);
+					this.loading = true;
+					setTimeout(() => {
+						this.$axios
+							.post(
+								`search-product-${this.productType}`,
+								this.searchOption
+							)
+							.then(
+								(response) => {
+									this.products = response.data.products;
+									this.loading = false;
+									this.click = true;
+								},
+								(error) => {
+									$nuxt.$emit("error", error);
+									this.click = true;
+								}
+							);
+					}, 500);
 				}
 			},
 
@@ -419,13 +510,13 @@
 
 		created() {
 			this.getProduct();
-			this.$nuxt.$on("triggerProduct", () => {
+			this.$nuxt.$on("triggerAllProduct", () => {
 				this.getProduct();
 			});
 		},
 
 		beforeDestroy() {
-			this.$nuxt.$off("triggerProduct");
+			this.$nuxt.$off("triggerAllProduct");
 		},
 	};
 </script>
